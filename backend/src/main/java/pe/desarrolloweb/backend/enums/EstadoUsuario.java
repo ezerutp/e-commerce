@@ -1,6 +1,6 @@
 package pe.desarrolloweb.backend.enums;
 
-public enum EstadoCliente {
+public enum EstadoUsuario {
     ACTIVO,
     SUSPENDIDO
 }
