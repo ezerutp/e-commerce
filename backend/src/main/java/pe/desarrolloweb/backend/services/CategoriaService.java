@@ -7,26 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pe.desarrolloweb.backend.entities.Categoria;
+import pe.desarrolloweb.backend.repositories.CategoriaRepository;
 
 @Service
 public class CategoriaService {
     
     @Autowired
-    private CategoriaService categoriaService;
+    private CategoriaRepository categoriaRepository;
 
     public List<Categoria> findAll() {
-        return categoriaService.findAll();
+        return categoriaRepository.findAll();
     }
 
     public Optional<Categoria> findById(Long id) {
-        return categoriaService.findById(id);
+        return categoriaRepository.findById(id);
     }
 
     public Categoria save(Categoria categoria) {
-        return categoriaService.save(categoria);
+        return categoriaRepository.save(categoria);
     }
 
     public void deleteById(Long id) {
-        categoriaService.deleteById(id);
+        categoriaRepository.deleteById(id);
     }
 }

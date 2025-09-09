@@ -44,7 +44,7 @@ public class CarritoItemController {
         Optional<CarritoItem> existente = carritoItemService.findById(id);
         if (existente.isPresent()) {
             CarritoItem item = existente.get();
-            if (carritoItemDetalles.getCarritoId() != null) item.setCarritoId(carritoItemDetalles.getCarritoId());
+            if (carritoItemDetalles.getCarrito() != null) item.setCarrito(carritoItemDetalles.getCarrito());
             if (carritoItemDetalles.getVarianteId() != null) item.setVarianteId(carritoItemDetalles.getVarianteId());
             if (carritoItemDetalles.getCantidad() != null) item.setCantidad(carritoItemDetalles.getCantidad());
             if (carritoItemDetalles.getPrecioUnitario() != null) item.setPrecioUnitario(carritoItemDetalles.getPrecioUnitario());

@@ -20,8 +20,9 @@ public class CarritoItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "carrito_id", nullable = false)
-    private Long carritoId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "carrito_id", nullable = false, foreignKey = @ForeignKey(name = "fk_carritoitem_carrito"))
+    private Carrito carrito;
 
     @Column(name = "variante_id", nullable = false)
     private Long varianteId;
