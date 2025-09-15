@@ -14,6 +14,16 @@ java {
 	}
 }
 
+compileJava {
+    options.compilerArgs << '-parameters'
+    options.fork = true
+}
+
+compileTestJava {
+    options.compilerArgs << '-parameters'
+    options.fork = true
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor

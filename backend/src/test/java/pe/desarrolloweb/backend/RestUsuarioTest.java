@@ -55,14 +55,15 @@ public class RestUsuarioTest {
         assertEquals(HttpStatus.OK.value(), status);
     }
     
-    // Crear un nuevo usuario
+    // Crear un nuevo usuario)
     @Test
     public void testCreateUsuario() throws Exception {
         URI uri = new URI("/api/usuarios");
         String nuevoUsuarioJson = """
             {
-            "email": "juan.perez@email.com",
-            "password": "usuario123",
+        
+            "email": "juan.david.teco@email.com",
+            "passwordHash": "usuario123",
             "nombre": "Juan",
             "apellido": "Pérez",
             "telefono": "987654323",

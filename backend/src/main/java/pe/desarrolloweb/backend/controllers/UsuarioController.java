@@ -33,7 +33,7 @@ public class UsuarioController {
 
     // Obtener un usuario por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getUsuarioById(@PathVariable Long id) {
+    public ResponseEntity<Usuario> getUsuarioById(@PathVariable("id") Long id) {
         Optional<Usuario> usuario = usuarioService.findById(id);
         if (usuario.isPresent()) {
             return ResponseEntity.ok(usuario.get());
@@ -51,7 +51,7 @@ public class UsuarioController {
 
     // Actualizar un usuario existente
     @PatchMapping("/{id}")
-    public ResponseEntity<Usuario> updateUsuario(@PathVariable Long id, @RequestBody Usuario usuarioDetalles) {
+    public ResponseEntity<Usuario> updateUsuario(@PathVariable("id") Long id, @RequestBody Usuario usuarioDetalles) {
         Optional<Usuario> usuarioExistente = usuarioService.findById(id);
         if (usuarioExistente.isPresent()) {
             Usuario usuario = usuarioExistente.get();
@@ -88,7 +88,7 @@ public class UsuarioController {
 
     // Eliminar un usuario por ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUsuario(@PathVariable("id") Long id) {
         Optional<Usuario> usuario = usuarioService.findById(id);
         if (usuario.isPresent()) {
             usuarioService.deleteById(id);

@@ -48,16 +48,19 @@ public class RestPagoTest {
 	public void testCreatePago() throws Exception {
 		URI uri = new URI("/api/pagos");
 		String nuevoPagoJson = """
-			{
-				\"pedidoId\": 1,
-				\"metodo\": \"EFECTIVO\",
-				\"proveedor\": \"Banco\",
-				\"monto\": 100.50,
-				\"moneda\": \"PEN\",
-				\"estado\": \"PENDIENTE\",
-				\"referenciaProveedor\": \"REF123\"
-			}
-			""";
+							{
+				  "pedidoId": 101,
+				  "metodo": "TARJETA",
+				  "proveedor": "VISA",
+				  "monto": 150.75,
+				  "moneda": "PEN",
+				  "estado": "PENDIENTE",
+				  "referenciaProveedor": "AUTH123456",
+				  "autorizadoEn": "2025-09-08T15:30:00",
+				  "capturadoEn": "2025-09-08T16:00:00",
+				  "updatedAt": "2025-09-08T21:45:00"
+				}
+							""";
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(uri)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(nuevoPagoJson);

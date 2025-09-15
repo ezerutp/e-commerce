@@ -47,13 +47,18 @@ public class RestCarritoItemTest {
     public void testCreateCarritoItem() throws Exception {
         URI uri = new URI("/api/carrito-items");
         String nuevoItemJson = """
-            {
-              "carritoId": 1,
-              "varianteId": 101,
-              "cantidad": 2,
-              "precioUnitario": 50.00
-            }
-            """;
+                            {
+                  "id": 1,
+                  "carrito": {
+                    "id": 1
+                  },
+                  "varianteId": 2001,
+                  "cantidad": 3,
+                  "precioUnitario": 59.99,
+                  "updatedAt": "2025-09-08T21:30:00"
+                }
+
+                            """;
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(nuevoItemJson);
