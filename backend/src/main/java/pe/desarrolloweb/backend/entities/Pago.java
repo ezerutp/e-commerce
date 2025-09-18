@@ -23,9 +23,10 @@ public class Pago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "El pedidoId es obligatorio")
-    @Column(name = "pedido_id", nullable = false)
-    private Long pedidoId;
+    @NotNull(message = "El pedido es obligatorio")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "pedido_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pago_pedido"))
+    private Pedido pedido;
 
     @NotNull(message = "El método de pago es obligatorio")
     @Enumerated(EnumType.STRING)

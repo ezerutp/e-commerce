@@ -55,9 +55,6 @@ public class ProductoCategoriaController {
 		Optional<ProductoCategoria> existente = productoCategoriaService.findById(id);
 		if (existente.isPresent()) {
 			ProductoCategoria pc = existente.get();
-			if (detalles.getPrioridad() != null) {
-				pc.setPrioridad(detalles.getPrioridad());
-			}
 			// No se actualizan producto ni categoria por integridad relacional
 			ProductoCategoria actualizado = productoCategoriaService.save(pc);
 			return ResponseEntity.ok(actualizado);

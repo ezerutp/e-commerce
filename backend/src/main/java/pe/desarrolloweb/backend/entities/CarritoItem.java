@@ -24,8 +24,10 @@ public class CarritoItem {
     @JoinColumn(name = "carrito_id", nullable = false, foreignKey = @ForeignKey(name = "fk_carritoitem_carrito"))
     private Carrito carrito;
 
-    @Column(name = "variante_id", nullable = false)
-    private Long varianteId;
+    @NotNull(message = "El variante es obligatorio")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "variante_id", nullable = false, foreignKey = @ForeignKey(name = "fk_carritoitem_variante"))
+    private Variante variante;
 
     @NotNull(message = "La cantidad es obligatoria")
     @Min(value = 1, message = "La cantidad debe ser al menos 1")

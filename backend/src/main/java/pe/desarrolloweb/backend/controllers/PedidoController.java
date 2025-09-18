@@ -44,7 +44,7 @@ public class PedidoController {
         Optional<Pedido> existente = pedidoService.findById(id);
         if (existente.isPresent()) {
             Pedido pedido = existente.get();
-            if (pedidoDetalles.getClienteId() != null) pedido.setClienteId(pedidoDetalles.getClienteId());
+            if (pedidoDetalles.getUsuario() != null) pedido.setUsuario(pedidoDetalles.getUsuario());
             if (pedidoDetalles.getNumeroOrden() != null) pedido.setNumeroOrden(pedidoDetalles.getNumeroOrden());
             if (pedidoDetalles.getMoneda() != null) pedido.setMoneda(pedidoDetalles.getMoneda());
             if (pedidoDetalles.getEstado() != null) pedido.setEstado(pedidoDetalles.getEstado());

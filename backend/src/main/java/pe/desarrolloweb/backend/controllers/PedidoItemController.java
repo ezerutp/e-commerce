@@ -40,8 +40,8 @@ public class PedidoItemController {
         Optional<PedidoItem> existente = pedidoItemService.findById(id);
         if (existente.isPresent()) {
             PedidoItem item = existente.get();
-            if (detalles.getPedidoId() != null) item.setPedidoId(detalles.getPedidoId());
-            if (detalles.getVarianteId() != null) item.setVarianteId(detalles.getVarianteId());
+            if (detalles.getPedido() != null) item.setPedido(detalles.getPedido());
+            if (detalles.getVariante() != null) item.setVariante(detalles.getVariante());
             if (detalles.getSkuSnapshot() != null) item.setSkuSnapshot(detalles.getSkuSnapshot());
             if (detalles.getNombreProductoSnapshot() != null) item.setNombreProductoSnapshot(detalles.getNombreProductoSnapshot());
             if (detalles.getPrecioUnitario() != null) item.setPrecioUnitario(detalles.getPrecioUnitario());
