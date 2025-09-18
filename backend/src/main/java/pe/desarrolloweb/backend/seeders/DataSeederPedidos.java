@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import pe.desarrolloweb.backend.entities.Pedido;
+import pe.desarrolloweb.backend.entities.Usuario;
 import pe.desarrolloweb.backend.enums.EstadoPedido;
 import pe.desarrolloweb.backend.repositories.PedidoRepository;
 
@@ -30,7 +31,7 @@ public class DataSeederPedidos implements CommandLineRunner {
 
              // Usuario 1
             Pedido pedido1 = new Pedido();
-            pedido1.setClienteId(1L); 
+            pedido1.setUsuario(Usuario.builder().id(1L).build());
             pedido1.setNumeroOrden("ORD-1001");
             pedido1.setMoneda("PEN");
             pedido1.setEstado(EstadoPedido.PENDIENTE);
@@ -42,7 +43,7 @@ public class DataSeederPedidos implements CommandLineRunner {
 
             // Usuario 2
             Pedido pedido2 = new Pedido();
-            pedido2.setClienteId(2L);
+            pedido2.setUsuario(Usuario.builder().id(2L).build());
             pedido2.setNumeroOrden("ORD-1002");
             pedido2.setMoneda("USD");
             pedido2.setEstado(EstadoPedido.COMPLETADO);

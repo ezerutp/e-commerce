@@ -22,8 +22,7 @@ public class Carrito {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "usuario_id", nullable = false,
-                foreignKey = @ForeignKey(name = "fk_carrito_usuario"))
+    @JoinColumn(name = "usuario_id", nullable = false, foreignKey = @ForeignKey(name = "fk_carrito_usuario"))
     private Usuario usuario;
 
     @Enumerated(EnumType.STRING)
@@ -59,16 +58,20 @@ public class Carrito {
     private LocalDateTime updatedAt;
 
     @PrePersist
-    protected void onCreate() { createdAt = LocalDateTime.now(); }
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 
     @PreUpdate
-    protected void onUpdate() { updatedAt = LocalDateTime.now(); }
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
     public void recalc() {
         this.subtotal = items.stream()
-            .map(i -> i.getPrecioUnitario().multiply(new BigDecimal(i.getCantidad())))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(i -> i.getPrecioUnitario().multiply(new BigDecimal(i.getCantidad())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         this.total = subtotal.subtract(descuentoTotal == null ? BigDecimal.ZERO : descuentoTotal)
-                             .add(impuestos == null ? BigDecimal.ZERO : impuestos);
+                .add(impuestos == null ? BigDecimal.ZERO : impuestos);
     }
 }

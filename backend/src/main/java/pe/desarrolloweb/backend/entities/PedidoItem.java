@@ -19,13 +19,15 @@ public class PedidoItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "El pedidoId es obligatorio")
-    @Column(name = "pedido_id", nullable = false)
-    private Long pedidoId;
+    @NotNull(message = "El pedido es obligatorio")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "pedido_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_item_pedido"))
+    private Pedido pedido;
 
-    @NotNull(message = "El varianteId es obligatorio")
-    @Column(name = "variante_id", nullable = false)
-    private Long varianteId;
+    @NotNull(message = "El variante es obligatorio")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "variante_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedidoitem_variante"))
+    private Variante variante;
 
     @Size(max = 120, message = "El SKU no puede exceder 120 caracteres")
     @Column(name = "sku_snapshot")
