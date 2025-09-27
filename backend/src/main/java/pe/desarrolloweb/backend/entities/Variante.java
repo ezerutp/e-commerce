@@ -3,6 +3,8 @@ package pe.desarrolloweb.backend.entities;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,6 +36,7 @@ public class Variante {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name = "producto_id", nullable = false, foreignKey = @ForeignKey(name = "fk_variante_producto"))
     private Producto producto;
 

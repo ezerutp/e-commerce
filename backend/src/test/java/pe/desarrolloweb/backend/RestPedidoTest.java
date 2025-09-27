@@ -48,7 +48,9 @@ public class RestPedidoTest {
         URI uri = new URI("/api/pedidos");
         String nuevoPedidoJson = """
             {
-              "clienteId": 1,
+              "usuario": {
+                "id": 1
+              },
               "numeroOrden": "ORD-2001",
               "moneda": "PEN",
               "estado": "PENDIENTE",

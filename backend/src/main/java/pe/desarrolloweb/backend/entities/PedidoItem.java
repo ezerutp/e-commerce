@@ -2,8 +2,22 @@ package pe.desarrolloweb.backend.entities;
 
 import java.math.BigDecimal;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,11 +35,13 @@ public class PedidoItem {
 
     @NotNull(message = "El pedido es obligatorio")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name = "pedido_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_item_pedido"))
     private Pedido pedido;
 
     @NotNull(message = "El variante es obligatorio")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name = "variante_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedidoitem_variante"))
     private Variante variante;
 

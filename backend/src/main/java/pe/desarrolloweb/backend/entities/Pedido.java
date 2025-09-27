@@ -3,6 +3,8 @@ package pe.desarrolloweb.backend.entities;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,6 +40,7 @@ public class Pedido {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name = "usuario_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_usuario"))
     private Usuario usuario;
 

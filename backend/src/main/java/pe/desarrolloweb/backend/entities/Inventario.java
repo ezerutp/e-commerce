@@ -2,6 +2,8 @@ package pe.desarrolloweb.backend.entities;
 
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,6 +33,7 @@ public class Inventario {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull(message = "La variante no puede ser nula")
     @JoinColumn(name = "variante_id", nullable = false, foreignKey = @ForeignKey(name = "fk_inventario_variante"))
     private Variante variante;

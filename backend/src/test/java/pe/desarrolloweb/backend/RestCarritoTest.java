@@ -48,8 +48,8 @@ public class RestCarritoTest {
 		URI uri = new URI("/api/carritos");
 		String nuevoCarritoJson = """
 			{
-				\"usuario\": { \"id\": 1 },
-				\"estado\": \"ABIERTO\"
+			  "usuario": { "id": 1 },
+			  "estado": "ACTIVO"
 			}
 			""";
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(uri)
