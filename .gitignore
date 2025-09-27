@@ -13,6 +13,18 @@ build/
 *.logs
 .mtj.tmp/
 
+# Ignorar archivos y carpetas generados por Java/Spring Boot en backend
+backend/bin/
+backend/build/
+backend/out/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.idea/
+backend/*.iml
+backend/.gradle/
+backend/target/
+
 # Angular / Node.js
 /frontend/node_modules/
 /frontend/.angular/

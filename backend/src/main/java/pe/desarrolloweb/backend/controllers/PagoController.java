@@ -40,7 +40,7 @@ public class PagoController {
         Optional<Pago> existente = pagoService.findById(id);
         if (existente.isPresent()) {
             Pago pago = existente.get();
-            if (detalles.getPedidoId() != null) pago.setPedidoId(detalles.getPedidoId());
+            if (detalles.getPedido() != null) pago.setPedido(detalles.getPedido());
             if (detalles.getMetodo() != null) pago.setMetodo(detalles.getMetodo());
             if (detalles.getProveedor() != null) pago.setProveedor(detalles.getProveedor());
             if (detalles.getMonto() != null) pago.setMonto(detalles.getMonto());

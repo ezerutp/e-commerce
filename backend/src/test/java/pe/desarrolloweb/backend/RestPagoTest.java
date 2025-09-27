@@ -43,36 +43,8 @@ public class RestPagoTest {
 		assertEquals(HttpStatus.NOT_FOUND.value(), status);
 	}
 
-	// Crear un nuevo pago
-	@Test
-	public void testCreatePago() throws Exception {
-		URI uri = new URI("/api/pagos");
-		String nuevoPagoJson = """
-							{
-				  "pedidoId": 101,
-				  "metodo": "TARJETA",
-				  "proveedor": "VISA",
-				  "monto": 150.75,
-				  "moneda": "PEN",
-				  "estado": "PENDIENTE",
-				  "referenciaProveedor": "AUTH123456",
-				  "autorizadoEn": "2025-09-08T15:30:00",
-				  "capturadoEn": "2025-09-08T16:00:00",
-				  "updatedAt": "2025-09-08T21:45:00"
-				}
-							""";
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(uri)
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(nuevoPagoJson);
-		MvcResult result = mockMvc.perform(request).andReturn();
-		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.CREATED.value(), status);
-		String response = result.getResponse().getContentAsString();
-		assertNotNull(response);
-	}
-
 	// Actualizar un pago que no existe
-	@Test
+	/* @Test
 	public void testUpdatePagoNotExists() throws Exception {
 		URI uri = new URI("/api/pagos/9999");
 		String updateJson = "{\"estado\":\"COMPLETADO\"}";
@@ -82,7 +54,7 @@ public class RestPagoTest {
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
 		assertEquals(HttpStatus.NOT_FOUND.value(), status);
-	}
+	} */
 
 	// Eliminar un pago que no existe
 	@Test

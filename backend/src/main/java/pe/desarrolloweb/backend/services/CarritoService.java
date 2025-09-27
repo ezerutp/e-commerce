@@ -3,17 +3,17 @@ package pe.desarrolloweb.backend.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import pe.desarrolloweb.backend.entities.Carrito;
 import pe.desarrolloweb.backend.repositories.CarritoRepository;
 
 @Service
+@RequiredArgsConstructor
 public class CarritoService {
     
-    @Autowired
-    private CarritoRepository carritoRepository;
+    private final CarritoRepository carritoRepository;
 
     public List<Carrito> findAll() {
         return carritoRepository.findAll();

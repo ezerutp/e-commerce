@@ -3,17 +3,17 @@ package pe.desarrolloweb.backend.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import pe.desarrolloweb.backend.entities.Pedido;
 import pe.desarrolloweb.backend.repositories.PedidoRepository;
 
 @Service
+@RequiredArgsConstructor
 public class PedidoService {
 
-    @Autowired
-    private PedidoRepository pedidoRepository;
+    private final PedidoRepository pedidoRepository;
 
     public List<Pedido> findAll() {
         return pedidoRepository.findAll();

@@ -17,41 +17,47 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "carrito_items")
+@Table(name = "variantes")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CarritoItem {
-
+public class Variante {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @JoinColumn(name = "carrito_id", nullable = false, foreignKey = @ForeignKey(name = "fk_carritoitem_carrito"))
-    private Carrito carrito;
+    @JoinColumn(name = "producto_id", nullable = false, foreignKey = @ForeignKey(name = "fk_variante_producto"))
+    private Producto producto;
 
-    @NotNull(message = "El variante es obligatorio")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "variante_id", nullable = false, foreignKey = @ForeignKey(name = "fk_carritoitem_variante"))
-    private Variante variante;
+    @NotBlank(message = "El SKU es obligatorio")
+    @Size(max = 100, message = "El SKU no puede exceder 100 caracteres")
+    @Column(nullable = false, length = 100)
+    private String sku;
 
-    @NotNull(message = "La cantidad es obligatoria")
-    @Min(value = 1, message = "La cantidad debe ser al menos 1")
-    private Integer cantidad;
+    @Digits(integer = 12, fraction = 2)
+    @Column(name = "precio", precision = 12, scale = 2)
+    private BigDecimal precio = BigDecimal.ZERO;
 
-    @NotNull(message = "El precio unitario es obligatorio")
-    @Digits(integer = 12, fraction = 2, message = "El precio debe tener un máximo de 12 enteros y 2 decimales")
-    @Column(name = "precio_unitario", precision = 12, scale = 2, nullable = false)
-    private BigDecimal precioUnitario;
+    @Digits(integer = 12, fraction = 2)
+    @Column(name = "peso", precision = 12, scale = 2)
+    private BigDecimal peso = BigDecimal.ZERO;
+
+    @Column(name = "atributos_json", columnDefinition = "TEXT")
+    private String atributosJson;
+
+    @NotNull(message = "El estado activo es obligatorio")
+    private boolean activo;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
