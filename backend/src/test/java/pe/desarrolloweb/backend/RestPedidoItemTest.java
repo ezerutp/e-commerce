@@ -49,12 +49,12 @@ public class RestPedidoItemTest {
 		URI uri = new URI("/api/pedido-items");
 		String nuevoPedidoItemJson = """
 			{
-				\"pedidoId\": 1,
-				\"varianteId\": 1,
-				\"skuSnapshot\": \"SKU-123\",
-				\"nombreProductoSnapshot\": \"Producto de prueba\",
-				\"precioUnitario\": 50.00,
-				\"cantidad\": 2
+			"pedido": { "id": 1 },
+			"variante": { "id": 1 },
+			"skuSnapshot": "SKU12345",
+			"nombreProductoSnapshot": "Producto de prueba",
+			"precioUnitario": 50.00,
+			"cantidad": 2
 			}
 			""";
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(uri)

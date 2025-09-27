@@ -1,6 +1,7 @@
 package pe.desarrolloweb.backend.seeders;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import pe.desarrolloweb.backend.entities.Usuario;
@@ -9,8 +10,8 @@ import pe.desarrolloweb.backend.enums.RolUsuario;
 import pe.desarrolloweb.backend.repositories.UsuarioRepository;
 
 @Component
+@Order(1)
 public class DataSeederUsuarios implements CommandLineRunner {
-
 
     private final UsuarioRepository usuarioRepository;
 

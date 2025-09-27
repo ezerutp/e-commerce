@@ -61,7 +61,6 @@ public class RestUsuarioTest {
         URI uri = new URI("/api/usuarios");
         String nuevoUsuarioJson = """
             {
-        
             "email": "juan.david.teco@email.com",
             "passwordHash": "usuario123",
             "nombre": "Juan",

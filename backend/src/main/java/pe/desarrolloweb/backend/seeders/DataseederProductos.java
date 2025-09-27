@@ -1,12 +1,14 @@
 package pe.desarrolloweb.backend.seeders;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import pe.desarrolloweb.backend.entities.Producto;
 import pe.desarrolloweb.backend.repositories.ProductoRepository;
 
 @Component
+@Order(2)
 public class DataseederProductos implements CommandLineRunner {
 
     private final ProductoRepository productoRepository;
