@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,8 @@ import lombok.NoArgsConstructor;
 public class ProductoCategoria {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "producto_categoria_id_seq")
+    @SequenceGenerator(name = "producto_categoria_id_seq", sequenceName = "producto_categoria_id_seq", allocationSize = 1)
     private Long id;
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
