@@ -60,8 +60,8 @@ public class UsuarioController {
             if (usuarioDetalles.getEmail() != null) {
                 usuario.setEmail(usuarioDetalles.getEmail());
             }
-            if (usuarioDetalles.getPasswordHash() != null) {
-                usuario.setPasswordHash(usuarioDetalles.getPasswordHash());
+            if (usuarioDetalles.getPassword() != null) {
+                usuario.setPassword(usuarioDetalles.getPassword());
             }
             if (usuarioDetalles.getNombre() != null) {
                 usuario.setNombre(usuarioDetalles.getNombre());

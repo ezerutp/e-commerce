@@ -2,8 +2,17 @@ package pe.desarrolloweb.backend.entities;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +26,8 @@ import lombok.NoArgsConstructor;
 public class Producto {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "producto_seq_gen")
+    @SequenceGenerator(name = "producto_seq_gen", sequenceName = "producto_seq", allocationSize = 1)
     private Long id;
 
     @NotBlank(message = "El nombre del producto es obligatorio")
