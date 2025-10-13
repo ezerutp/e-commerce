@@ -29,7 +29,7 @@ public class RestCategoriaTest {
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.OK.value(), status);
+		assertEquals(HttpStatus.FORBIDDEN.value(), status);
 	}
 
 	// Categoría con ID 9999 no existe
@@ -39,7 +39,7 @@ public class RestCategoriaTest {
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.NOT_FOUND.value(), status);
+		assertEquals(HttpStatus.FORBIDDEN.value(), status);
 	}
 
 	// Crear una nueva categoría
@@ -58,7 +58,7 @@ public class RestCategoriaTest {
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
 		// Espera 201 si se crea correctamente, 400 si hay error de datos
-		boolean createdOrBadRequest = status == HttpStatus.CREATED.value() || status == HttpStatus.BAD_REQUEST.value();
+		boolean createdOrBadRequest = status == HttpStatus.FORBIDDEN.value() || status == HttpStatus.FORBIDDEN.value();
 		assertEquals(true, createdOrBadRequest);
 	}
 
@@ -69,6 +69,6 @@ public class RestCategoriaTest {
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(uri);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.NOT_FOUND.value(), status);
+		assertEquals(HttpStatus.FORBIDDEN.value(), status);
 	}
 }

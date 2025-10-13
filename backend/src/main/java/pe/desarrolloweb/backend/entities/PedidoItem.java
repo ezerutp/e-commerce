@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -30,7 +31,8 @@ import lombok.NoArgsConstructor;
 public class PedidoItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pedido_item_id_seq")
+    @SequenceGenerator(name = "pedido_item_id_seq", sequenceName = "pedido_item_id_seq", allocationSize = 1)
     private Long id;
 
     @NotNull(message = "El pedido es obligatorio")

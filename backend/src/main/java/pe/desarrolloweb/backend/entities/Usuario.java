@@ -2,8 +2,22 @@ package pe.desarrolloweb.backend.entities;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +34,8 @@ import pe.desarrolloweb.backend.enums.RolUsuario;
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuario_seq_gen")
+    @SequenceGenerator(name = "usuario_seq_gen", sequenceName = "usuario_seq", allocationSize = 1)
     private Long id;
 
     @NotBlank(message = "El email es obligatorio")
@@ -29,10 +44,15 @@ public class Usuario {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @NotBlank(message = "El nombre de usuario es obligatorio")
+    @Size(max = 50, message = "El nombre de usuario no puede exceder 50 caracteres")
+    @Column(unique = true, nullable = false)
+    private String username;
+
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(max = 255, message = "La contraseña no puede exceder 255 caracteres")
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 120, message = "El nombre no puede exceder 120 caracteres")
