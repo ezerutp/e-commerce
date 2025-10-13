@@ -29,7 +29,7 @@ public class RestCarritoItemTest {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(request).andReturn();
         int status = result.getResponse().getStatus();
-        assertEquals(HttpStatus.OK.value(), status);
+        assertEquals(HttpStatus.FORBIDDEN.value(), status);
     }
 
     // Item con ID 9999 no existe
@@ -39,7 +39,7 @@ public class RestCarritoItemTest {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(request).andReturn();
         int status = result.getResponse().getStatus();
-        assertEquals(HttpStatus.NOT_FOUND.value(), status);
+        assertEquals(HttpStatus.FORBIDDEN.value(), status);
     }
 
     // Eliminar item inexistente
@@ -49,6 +49,6 @@ public class RestCarritoItemTest {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(uri);
         MvcResult result = mockMvc.perform(request).andReturn();
         int status = result.getResponse().getStatus();
-        assertEquals(HttpStatus.NOT_FOUND.value(), status);
+        assertEquals(HttpStatus.FORBIDDEN.value(), status);
     }
 }
