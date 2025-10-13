@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import pe.desarrolloweb.backend.entities.Usuario;
+import pe.desarrolloweb.backend.security.LoginRequest;
 import pe.desarrolloweb.backend.security.jwt.JwtUtil;
 import pe.desarrolloweb.backend.services.UsuarioService;
 
@@ -22,10 +23,10 @@ public class AuthRestController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/auth")
-	public ResponseEntity<String> authenticate(@RequestBody Usuario authRequest) {
+	public ResponseEntity<String> authenticate(@RequestBody LoginRequest authRequest) {
         Usuario user = usuarioService.findByUsername(authRequest.getUsername());
 		if (user != null && passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
-			return ResponseEntity.ok(jwtUtil.generateToken(authRequest.getUsername()));
+			return ResponseEntity.ok(jwtUtil.generateToken(user.getUsername()));
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
