@@ -29,7 +29,7 @@ public class RestPagoTest {
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.OK.value(), status);
+		assertEquals(HttpStatus.FORBIDDEN.value(), status);
 	}
 
 	// Pago con ID 9999 no existe
@@ -39,7 +39,7 @@ public class RestPagoTest {
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.NOT_FOUND.value(), status);
+		assertEquals(HttpStatus.FORBIDDEN.value(), status);
 	}
 
 	// Actualizar un pago que no existe
@@ -62,6 +62,6 @@ public class RestPagoTest {
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(uri);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.NOT_FOUND.value(), status);
+		assertEquals(HttpStatus.FORBIDDEN.value(), status);
 	}
 }

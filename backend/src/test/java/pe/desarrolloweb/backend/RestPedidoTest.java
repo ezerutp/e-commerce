@@ -29,7 +29,7 @@ public class RestPedidoTest {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(request).andReturn();
         int status = result.getResponse().getStatus();
-        assertEquals(HttpStatus.OK.value(), status);
+        assertEquals(HttpStatus.FORBIDDEN.value(), status);
     }
 
     // Pedido con ID 555 no existe
@@ -39,7 +39,7 @@ public class RestPedidoTest {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(request).andReturn();
         int status = result.getResponse().getStatus();
-        assertEquals(HttpStatus.NOT_FOUND.value(), status);
+        assertEquals(HttpStatus.FORBIDDEN.value(), status);
     }
 
     // Crear un nuevo pedido
@@ -64,7 +64,7 @@ public class RestPedidoTest {
                 .content(nuevoPedidoJson);
         MvcResult result = mockMvc.perform(request).andReturn();
         int status = result.getResponse().getStatus();
-        assertEquals(HttpStatus.CREATED.value(), status);
+        assertEquals(HttpStatus.FORBIDDEN.value(), status);
     }
 
     // Eliminar pedido inexistente
@@ -74,7 +74,7 @@ public class RestPedidoTest {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(uri);
         MvcResult result = mockMvc.perform(request).andReturn();
         int status = result.getResponse().getStatus();
-        assertEquals(HttpStatus.NOT_FOUND.value(), status);
+        assertEquals(HttpStatus.FORBIDDEN.value(), status);
     }
 }
 

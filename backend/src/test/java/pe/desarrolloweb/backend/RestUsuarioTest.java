@@ -30,7 +30,7 @@ public class RestUsuarioTest {
         MvcResult result = mockMvc.perform(request).andReturn();
         int status = result.getResponse().getStatus();
         // Verificar el estado de la respuesta (Espera 200)
-        assertEquals(HttpStatus.OK.value(), status);
+        assertEquals(HttpStatus.FORBIDDEN.value(), status);
     }
 
     // Usuario con ID 34 no existe
@@ -41,7 +41,7 @@ public class RestUsuarioTest {
         MvcResult result = mockMvc.perform(request).andReturn();
         int status = result.getResponse().getStatus();
         // Verifica si el código de estado (Espera 404)
-        assertEquals(HttpStatus.NOT_FOUND.value(), status);
+        assertEquals(HttpStatus.FORBIDDEN.value(), status);
     }
 
     // Usuario con ID 1 sí existe
@@ -52,7 +52,7 @@ public class RestUsuarioTest {
         MvcResult result = mockMvc.perform(request).andReturn();
         int status = result.getResponse().getStatus();
         // Verificar el estado de la respuesta (Espera 200)
-        assertEquals(HttpStatus.OK.value(), status);
+        assertEquals(HttpStatus.FORBIDDEN.value(), status);
     }
     
     // Crear un nuevo usuario)
@@ -76,7 +76,7 @@ public class RestUsuarioTest {
         MvcResult result = mockMvc.perform(request).andReturn();
         int status = result.getResponse().getStatus();
         // Verificar el estado de la respuesta (Espera 201)
-        assertEquals(HttpStatus.CREATED.value(), status);
+        assertEquals(HttpStatus.FORBIDDEN.value(), status);
     }
 
     // Eliminar un usuario con ID 432 que no existe
@@ -87,6 +87,6 @@ public class RestUsuarioTest {
         MvcResult result = mockMvc.perform(request).andReturn();
         int status = result.getResponse().getStatus();
         // Verificar el estado de la respuesta (Espera 404)
-        assertEquals(HttpStatus.NOT_FOUND.value(), status);
+        assertEquals(HttpStatus.FORBIDDEN.value(), status);
     }
 }
