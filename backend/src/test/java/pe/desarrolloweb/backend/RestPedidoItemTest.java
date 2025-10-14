@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.URI;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,25 +23,47 @@ public class RestPedidoItemTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+	private String token;
+
+    // Generar el token JWT para los tests
+    @BeforeEach
+    public void setUp() throws Exception {
+        String loginJson = """
+                {
+                "username": "admin",
+                "password": "admin123"
+                }
+                """;
+        MvcResult res = mockMvc.perform(
+                MockMvcRequestBuilders.post("/auth")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(loginJson))
+                .andReturn();
+        token = res.getResponse().getContentAsString();
+    }
 
 	// Obtener todos los pedido items
 	@Test
 	public void testGetPedidoItems() throws Exception {
 		URI uri = new URI("/api/pedido-items");
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri)
+				.header("Authorization", "Bearer " + token)
+				.accept(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.FORBIDDEN.value(), status);
+		assertEquals(HttpStatus.OK.value(), status);
 	}
 
 	// PedidoItem con ID 9999 no existe
 	@Test
 	public void testGetPedidoItemByIdNotExists() throws Exception {
 		URI uri = new URI("/api/pedido-items/9999");
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri)
+				.header("Authorization", "Bearer " + token)
+				.accept(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.FORBIDDEN.value(), status);
+		assertEquals(HttpStatus.NOT_FOUND.value(), status);
 	}
 
 	// Crear un nuevo pedido item
@@ -58,11 +81,12 @@ public class RestPedidoItemTest {
 			}
 			""";
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(uri)
+				.header("Authorization", "Bearer " + token)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(nuevoPedidoItemJson);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.FORBIDDEN.value(), status);
+		assertEquals(HttpStatus.CREATED.value(), status);
 		String response = result.getResponse().getContentAsString();
 		assertNotNull(response);
 	}
@@ -73,20 +97,22 @@ public class RestPedidoItemTest {
 		URI uri = new URI("/api/pedido-items/9999");
 		String updateJson = "{\"cantidad\":5}";
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.patch(uri)
+				.header("Authorization", "Bearer " + token)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(updateJson);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.FORBIDDEN.value(), status);
+		assertEquals(HttpStatus.NOT_FOUND.value(), status);
 	}
 
 	// Eliminar un pedido item que no existe
 	@Test
 	public void testDeletePedidoItemNotExists() throws Exception {
 		URI uri = new URI("/api/pedido-items/9999");
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(uri);
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(uri)
+				.header("Authorization", "Bearer " + token);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.FORBIDDEN.value(), status);
+		assertEquals(HttpStatus.NOT_FOUND.value(), status);
 	}
 }
