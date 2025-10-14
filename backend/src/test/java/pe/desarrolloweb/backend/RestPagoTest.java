@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.URI;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,47 +22,57 @@ public class RestPagoTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+	private String token;
+
+    // Generar el token JWT para los tests
+    @BeforeEach
+    public void setUp() throws Exception {
+        String loginJson = """
+                {
+                "username": "admin",
+                "password": "admin123"
+                }
+                """;
+        MvcResult res = mockMvc.perform(
+                MockMvcRequestBuilders.post("/auth")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(loginJson))
+                .andReturn();
+        token = res.getResponse().getContentAsString();
+    }
 
 	// Obtener todos los pagos
 	@Test
 	public void testGetPagos() throws Exception {
 		URI uri = new URI("/api/pagos");
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri)
+				.header("Authorization", "Bearer " + token)
+				.accept(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.FORBIDDEN.value(), status);
+		assertEquals(HttpStatus.OK.value(), status);
 	}
 
 	// Pago con ID 9999 no existe
 	@Test
 	public void testGetPagoByIdNotExists() throws Exception {
 		URI uri = new URI("/api/pagos/9999");
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
-		MvcResult result = mockMvc.perform(request).andReturn();
-		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.FORBIDDEN.value(), status);
-	}
-
-	// Actualizar un pago que no existe
-	/* @Test
-	public void testUpdatePagoNotExists() throws Exception {
-		URI uri = new URI("/api/pagos/9999");
-		String updateJson = "{\"estado\":\"COMPLETADO\"}";
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.patch(uri)
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(updateJson);
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri)
+				.header("Authorization", "Bearer " + token)
+				.accept(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
 		assertEquals(HttpStatus.NOT_FOUND.value(), status);
-	} */
+	}
 
 	// Eliminar un pago que no existe
 	@Test
 	public void testDeletePagoNotExists() throws Exception {
 		URI uri = new URI("/api/pagos/9999");
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(uri);
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(uri)
+				.header("Authorization", "Bearer " + token);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.FORBIDDEN.value(), status);
+		assertEquals(HttpStatus.NOT_FOUND.value(), status);
 	}
 }

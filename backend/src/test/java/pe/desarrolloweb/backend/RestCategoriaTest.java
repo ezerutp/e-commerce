@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.URI;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,25 +22,47 @@ public class RestCategoriaTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+	private String token;
+
+    // Generar el token JWT para los tests
+    @BeforeEach
+    public void setUp() throws Exception {
+        String loginJson = """
+                {
+                "username": "admin",
+                "password": "admin123"
+                }
+                """;
+        MvcResult res = mockMvc.perform(
+                MockMvcRequestBuilders.post("/auth")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(loginJson))
+                .andReturn();
+        token = res.getResponse().getContentAsString();
+    }
 
 	// Obtener todas las categorías
 	@Test
 	public void testGetCategorias() throws Exception {
 		URI uri = new URI("/api/categorias");
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri)
+				.header("Authorization", "Bearer " + token)
+				.accept(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.FORBIDDEN.value(), status);
+		assertEquals(HttpStatus.OK.value(), status);
 	}
 
 	// Categoría con ID 9999 no existe
 	@Test
 	public void testGetCategoriaByIdNotExists() throws Exception {
 		URI uri = new URI("/api/categorias/9999");
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(uri)
+				.header("Authorization", "Bearer " + token)
+				.accept(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.FORBIDDEN.value(), status);
+		assertEquals(HttpStatus.NOT_FOUND.value(), status);
 	}
 
 	// Crear una nueva categoría
@@ -53,12 +76,13 @@ public class RestCategoriaTest {
 			}
 			""";
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(uri)
+				.header("Authorization", "Bearer " + token)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(nuevaCategoriaJson);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
 		// Espera 201 si se crea correctamente, 400 si hay error de datos
-		boolean createdOrBadRequest = status == HttpStatus.FORBIDDEN.value() || status == HttpStatus.FORBIDDEN.value();
+		boolean createdOrBadRequest = status == HttpStatus.CREATED.value() || status == HttpStatus.BAD_REQUEST.value();
 		assertEquals(true, createdOrBadRequest);
 	}
 
@@ -66,9 +90,10 @@ public class RestCategoriaTest {
 	@Test
 	public void testDeleteCategoriaNotExists() throws Exception {
 		URI uri = new URI("/api/categorias/9999");
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(uri);
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(uri)
+				.header("Authorization", "Bearer " + token);
 		MvcResult result = mockMvc.perform(request).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.FORBIDDEN.value(), status);
+		assertEquals(HttpStatus.NOT_FOUND.value(), status);
 	}
 }
