@@ -1,0 +1,24 @@
+<form [formGroup]="miForm" (ngSubmit)="onSubmit()" class="p-4 border rounded shadow-sm bg-light">
+
+    <div class="mb-3">
+        <label for="username" class="form-label">Usuario</label>
+        <input id="username" formControlName="username" class="form-control" placeholder="Ingrese su usuario">
+        <div *ngIf="miForm.get('username')?.touched && miForm.get('username')?.invalid" class="text-danger small">
+            <div *ngIf="miForm.get('username')?.errors?.['required']">Usuario es obligatorio</div>
+            <div *ngIf="miForm.get('username')?.errors?.['maxlength']">Máximo 50 caracteres</div>
+        </div>
+    </div>
+
+
+    <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" id="password" formControlName="password" class="form-control"
+            placeholder="Ingrese su contraseña">
+        <div *ngIf="miForm.get('password')?.touched && miForm.get('password')?.invalid" class="text-danger small">
+            <div *ngIf="miForm.get('password')?.errors?.['required']">Contraseña es obligatoria</div>
+            <div *ngIf="miForm.get('password')?.errors?.['maxlength']">Máximo 255 caracteres</div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100" [disabled]="miForm.invalid">Iniciar Sesión</button>
+</form>

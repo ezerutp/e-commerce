@@ -1,0 +1,59 @@
+<form [formGroup]="miForm" (ngSubmit)="onSubmit()" class="p-4 border rounded shadow-sm bg-light">
+
+  <div class="mb-3">
+    <label for="username" class="form-label">Username</label>
+    <input id="username" formControlName="username" class="form-control" placeholder="Ingrese su username">
+    <div *ngIf="miForm.get('username')?.touched && miForm.get('username')?.invalid" class="text-danger small">
+      <div *ngIf="miForm.get('username')?.errors?.['required']">Username es obligatorio</div>
+      <div *ngIf="miForm.get('username')?.errors?.['maxlength']">Máximo 50 caracteres</div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="password" class="form-label">Contraseña</label>
+    <input type="password" id="password" formControlName="password" class="form-control" placeholder="Ingrese su contraseña">
+    <div *ngIf="miForm.get('password')?.touched && miForm.get('password')?.invalid" class="text-danger small">
+      <div *ngIf="miForm.get('password')?.errors?.['required']">Contraseña es obligatoria</div>
+      <div *ngIf="miForm.get('password')?.errors?.['maxlength']">Máximo 255 caracteres</div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="nombre" class="form-label">Nombre</label>
+    <input id="nombre" formControlName="nombre" class="form-control" placeholder="Ingrese su nombre">
+    <div *ngIf="miForm.get('nombre')?.touched && miForm.get('nombre')?.invalid" class="text-danger small">
+      <div *ngIf="miForm.get('nombre')?.errors?.['required']">Nombre es obligatorio</div>
+      <div *ngIf="miForm.get('nombre')?.errors?.['maxlength']">Máximo 120 caracteres</div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="apellido" class="form-label">Apellido</label>
+    <input id="apellido" formControlName="apellido" class="form-control" placeholder="Ingrese su apellido">
+    <div *ngIf="miForm.get('apellido')?.touched && miForm.get('apellido')?.invalid" class="text-danger small">
+      <div *ngIf="miForm.get('apellido')?.errors?.['required']">Apellido es obligatorio</div>
+      <div *ngIf="miForm.get('apellido')?.errors?.['maxlength']">Máximo 120 caracteres</div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input id="email" formControlName="email" class="form-control" placeholder="Ingrese su email">
+    <div *ngIf="miForm.get('email')?.touched && miForm.get('email')?.invalid" class="text-danger small">
+      <div *ngIf="miForm.get('email')?.errors?.['required']">Email es obligatorio</div>
+      <div *ngIf="miForm.get('email')?.errors?.['email']">Email no es válido</div>
+      <div *ngIf="miForm.get('email')?.errors?.['maxlength']">Máximo 255 caracteres</div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="telefono" class="form-label">Teléfono</label>
+    <input id="telefono" formControlName="telefono" class="form-control" placeholder="Ingrese su teléfono">
+    <div *ngIf="miForm.get('telefono')?.touched && miForm.get('telefono')?.invalid" class="text-danger small">
+      <div *ngIf="miForm.get('telefono')?.errors?.['required']">Teléfono es obligatorio</div>
+      <div *ngIf="miForm.get('telefono')?.errors?.['pattern']">Debe tener 9 dígitos</div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary w-100" [disabled]="miForm.invalid">Enviar</button>
+</form>

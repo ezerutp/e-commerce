@@ -1,0 +1,40 @@
+<form [formGroup]="miForm" (ngSubmit)="onSubmit()" class="p-4 border rounded shadow-sm bg-light">
+
+  <div class="mb-3">
+    <label for="nombre" class="form-label">Nombre</label>
+    <input id="nombre" formControlName="nombre" class="form-control" placeholder="Ingrese el nombre del producto">
+    <div *ngIf="miForm.get('nombre')?.touched && miForm.get('nombre')?.invalid" class="text-danger small">
+      <div *ngIf="miForm.get('nombre')?.errors?.['required']">Nombre es obligatorio</div>
+      <div *ngIf="miForm.get('nombre')?.errors?.['maxlength']">Máximo 255 caracteres</div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="descripcion" class="form-label">Descripción</label>
+    <textarea id="descripcion" formControlName="descripcion" class="form-control" placeholder="Ingrese la descripción"></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="marca" class="form-label">Marca</label>
+    <input id="marca" formControlName="marca" class="form-control" placeholder="Ingrese la marca">
+    <div *ngIf="miForm.get('marca')?.touched && miForm.get('marca')?.invalid" class="text-danger small">
+      <div *ngIf="miForm.get('marca')?.errors?.['maxlength']">Máximo 120 caracteres</div>
+    </div>
+  </div>
+
+  <div class="form-check mb-3">
+    <input type="checkbox" id="activo" class="form-check-input" formControlName="activo">
+    <label for="activo" class="form-check-label">Activo</label>
+  </div>
+
+  <div class="mb-3">
+    <label for="slug" class="form-label">Slug</label>
+    <input id="slug" formControlName="slug" class="form-control" placeholder="Ingrese slug (opcional)">
+    <div *ngIf="miForm.get('slug')?.touched && miForm.get('slug')?.invalid" class="text-danger small">
+      <div *ngIf="miForm.get('slug')?.errors?.['pattern']">Formato inválido (solo letras minúsculas, números y guiones)</div>
+      <div *ngIf="miForm.get('slug')?.errors?.['maxlength']">Máximo 255 caracteres</div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary w-100" [disabled]="miForm.invalid">Crear Producto</button>
+</form>
