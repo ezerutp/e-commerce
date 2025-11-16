@@ -24,10 +24,12 @@ public class CarritoService {
     }
 
     public Carrito save(Carrito carrito) {
+         if (carrito == null) return null;
         return carritoRepository.save(carrito);
     }
 
     public void deleteById(Long id) {
+        if (id == null) return;
         carritoRepository.deleteById(id);
     }
 }
