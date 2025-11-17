@@ -1,0 +1,64 @@
+<!-- NAVBAR DE PRUEBA -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+  <div class="container-fluid">
+
+    <!-- Logo / Marca -->
+    <a class="navbar-brand fw-bold" routerLink="/">E-Commerce</a>
+
+    <!-- Botón collapse para pantallas pequeñas -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Links del navbar -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+      <!-- Links a la izquierda -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link px-3" routerLink="/" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact:true}">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3" routerLink="/registroUsuario" routerLinkActive="active">Registro Usuario</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3" routerLink="/registroCategoria" routerLinkActive="active">Registro Categoría</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3" routerLink="/registroProducto" routerLinkActive="active">Registro Producto</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3" routerLink="/ruta-no-existe" routerLinkActive="active">404</a>
+        </li>
+      </ul>
+
+      <!-- Separación y "Iniciar Sesión" -->
+      @if (!isLoggedIn()) {
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item separator d-none d-lg-block"></li>
+          <li class="nav-item">
+            <a class="nav-link px-3 btn btn-outline-light rounded text-start" routerLink="/login"
+              routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Iniciar Sesión</a>
+          </li>
+        </ul>
+      } @else {
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-4"></i>
+              <span class="ms-2 d-none d-lg-inline">{{ getUserName() }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" routerLink="/perfil">Perfil</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" (click)="logout()">Cerrar Sesión</a></li>
+            </ul>
+          </li>
+        </ul>
+      }
+    </div>
+  </div>
+</nav>
