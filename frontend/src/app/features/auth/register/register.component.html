@@ -1,0 +1,139 @@
+<div class="container mt-4">
+  <!-- Toast de notificación -->
+  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999">
+    <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header bg-success text-white">
+        <strong class="me-auto">Éxito</strong>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Usuario creado exitosamente
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón para abrir modal -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestión de Usuarios</h2>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registroModal">
+      <i class="bi bi-plus-circle"></i> Nuevo Usuario
+    </button>
+  </div>
+
+  <!-- Tabla de usuarios -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">Lista de Usuarios</h5>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Estado</th>
+              <th>Rol</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let usuario of usuarios">
+              <td>{{ usuario.id }}</td>
+              <td>{{ usuario.username }}</td>
+              <td>{{ usuario.nombre }}</td>
+              <td>{{ usuario.apellido }}</td>
+              <td>{{ usuario.email }}</td>
+              <td>{{ usuario.telefono }}</td>
+              <td>
+                <span class="badge" [ngClass]="usuario.estado === 'A' ? 'bg-success' : 'bg-secondary'">
+                  {{ usuario.estado === 'A' ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>{{ usuario.rol }}</td>
+            </tr>
+            <tr *ngIf="usuarios.length === 0">
+              <td colspan="8" class="text-center text-muted">No hay usuarios registrados</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Registro -->
+<div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="registroModalLabel">Registro de Usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="miForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input id="username" formControlName="username" class="form-control" placeholder="Ingrese su username">
+            <div *ngIf="miForm.get('username')?.touched && miForm.get('username')?.invalid" class="text-danger small">
+              <div *ngIf="miForm.get('username')?.errors?.['required']">Username es obligatorio</div>
+              <div *ngIf="miForm.get('username')?.errors?.['maxlength']">Máximo 50 caracteres</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" id="password" formControlName="password" class="form-control" placeholder="Ingrese su contraseña">
+            <div *ngIf="miForm.get('password')?.touched && miForm.get('password')?.invalid" class="text-danger small">
+              <div *ngIf="miForm.get('password')?.errors?.['required']">Contraseña es obligatoria</div>
+              <div *ngIf="miForm.get('password')?.errors?.['maxlength']">Máximo 255 caracteres</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input id="nombre" formControlName="nombre" class="form-control" placeholder="Ingrese su nombre">
+            <div *ngIf="miForm.get('nombre')?.touched && miForm.get('nombre')?.invalid" class="text-danger small">
+              <div *ngIf="miForm.get('nombre')?.errors?.['required']">Nombre es obligatorio</div>
+              <div *ngIf="miForm.get('nombre')?.errors?.['maxlength']">Máximo 120 caracteres</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input id="apellido" formControlName="apellido" class="form-control" placeholder="Ingrese su apellido">
+            <div *ngIf="miForm.get('apellido')?.touched && miForm.get('apellido')?.invalid" class="text-danger small">
+              <div *ngIf="miForm.get('apellido')?.errors?.['required']">Apellido es obligatorio</div>
+              <div *ngIf="miForm.get('apellido')?.errors?.['maxlength']">Máximo 120 caracteres</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input id="email" formControlName="email" class="form-control" placeholder="Ingrese su email">
+            <div *ngIf="miForm.get('email')?.touched && miForm.get('email')?.invalid" class="text-danger small">
+              <div *ngIf="miForm.get('email')?.errors?.['required']">Email es obligatorio</div>
+              <div *ngIf="miForm.get('email')?.errors?.['email']">Email no es válido</div>
+              <div *ngIf="miForm.get('email')?.errors?.['maxlength']">Máximo 255 caracteres</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input id="telefono" formControlName="telefono" class="form-control" placeholder="Ingrese su teléfono">
+            <div *ngIf="miForm.get('telefono')?.touched && miForm.get('telefono')?.invalid" class="text-danger small">
+              <div *ngIf="miForm.get('telefono')?.errors?.['required']">Teléfono es obligatorio</div>
+              <div *ngIf="miForm.get('telefono')?.errors?.['pattern']">Debe tener 9 dígitos</div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="miForm.invalid">Registrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

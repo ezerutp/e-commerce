@@ -1,0 +1,40 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg" style="max-width: 400px; width: 100%;">
+        <div class="card-body p-4">
+            <!-- Imagen de login -->
+            <div class="text-center mb-4">
+                <img src="https://cdn-icons-png.flaticon.com/512/6681/6681204.png" alt="Login"
+                    class="mb-3 rounded-circle border border-primary p-2" style="width: 100px; height: 100px;">
+                <h4 class="fw-bold text-primary">Iniciar Sesión</h4>
+            </div>
+
+            <form [formGroup]="miForm" (ngSubmit)="onSubmit()">
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-semibold">Usuario</label>
+                    <input id="username" formControlName="username" class="form-control form-control-lg"
+                        placeholder="Ingrese su usuario">
+                    <div *ngIf="miForm.get('username')?.touched && miForm.get('username')?.invalid"
+                        class="text-danger small mt-1">
+                        <div *ngIf="miForm.get('username')?.errors?.['required']">Usuario es obligatorio</div>
+                        <div *ngIf="miForm.get('username')?.errors?.['maxlength']">Máximo 50 caracteres</div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label fw-semibold">Contraseña</label>
+                    <input type="password" id="password" formControlName="password" class="form-control form-control-lg"
+                        placeholder="Ingrese su contraseña">
+                    <div *ngIf="miForm.get('password')?.touched && miForm.get('password')?.invalid"
+                        class="text-danger small mt-1">
+                        <div *ngIf="miForm.get('password')?.errors?.['required']">Contraseña es obligatoria</div>
+                        <div *ngIf="miForm.get('password')?.errors?.['maxlength']">Máximo 255 caracteres</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="miForm.invalid">
+                    Iniciar Sesión
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
