@@ -5,6 +5,7 @@ import { RegisterComponent } from './features/auth/register/register.component';
 import { CreateCategoriaComponent } from './admin/pages/gestion-categoria/create-categoria/create-categoria.component';
 import { CreateProductosComponent } from './admin/pages/gestion-productos/create-productos/create-productos.component'
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { ProfileComponent } from './features/users/profile/profile.component';
 
 import { authGuard } from './core/guards/auth.guards';
 
@@ -38,6 +39,12 @@ export const routes: Routes = [
         component: CreateProductosComponent,
         canActivate: [authGuard],
         title: 'Registro de Producto',
+    },
+    {
+        path: 'perfil',
+        component: ProfileComponent,
+        canActivate: [authGuard],
+        title: 'Perfil de Usuario',
     },
     {
         path: '**',

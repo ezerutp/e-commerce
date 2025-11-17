@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,15 +18,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
 import pe.desarrolloweb.backend.entities.Usuario;
 import pe.desarrolloweb.backend.services.UsuarioService;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@RequiredArgsConstructor
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+    private final PasswordEncoder passwordEncoder;
 
     // Obtener todos los usuarios
     @GetMapping
@@ -74,7 +78,7 @@ public class UsuarioController {
                 usuario.setEmail(usuarioDetalles.getEmail());
             }
             if (usuarioDetalles.getPassword() != null) {
-                usuario.setPassword(usuarioDetalles.getPassword());
+                usuario.setPassword(passwordEncoder.encode(usuarioDetalles.getPassword()));
             }
             if (usuarioDetalles.getNombre() != null) {
                 usuario.setNombre(usuarioDetalles.getNombre());
@@ -92,7 +96,7 @@ public class UsuarioController {
                 usuario.setRol(usuarioDetalles.getRol());
             }
 
-            Usuario usuarioActualizado = usuarioService.save(usuario);
+            Usuario usuarioActualizado = usuarioService.updateUsuario(usuario);
             return ResponseEntity.ok(usuarioActualizado);
         } else {
             return ResponseEntity.notFound().build();

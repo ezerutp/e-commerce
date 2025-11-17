@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LoginRequest } from '../../features/auth/models/login-request.js';
 import { LoginResponse } from '../../features/auth/models/login-response.js';
 
@@ -10,6 +10,8 @@ import { LoginResponse } from '../../features/auth/models/login-response.js';
 export class AuthService {
 
   private api = 'http://localhost:8080/auth';
+  private userNameSubject = new BehaviorSubject<string>('');
+  public userName$ = this.userNameSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -28,6 +30,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
+    this.userNameSubject.next('');
   }
 
   isLoggedIn(): boolean {
@@ -37,6 +40,10 @@ export class AuthService {
     }
     
     return !this.isTokenExpired(token);
+  }
+
+  setUserName(name: string): void {
+    this.userNameSubject.next(name);
   }
 
   private isTokenExpired(token: string): boolean {
