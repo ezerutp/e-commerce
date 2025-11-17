@@ -51,7 +51,7 @@ public class ProductoController {
 
     // Actualizar un producto existente
     @PatchMapping("/{id}")
-    public ResponseEntity<Producto> updateProducto(@PathVariable Long id, @RequestBody Producto productoDetalles) {
+    public ResponseEntity<Producto> updateProducto(@PathVariable("id") Long id, @RequestBody Producto productoDetalles) {
         Optional<Producto> productoExistente = productoService.findById(id);
         if (productoExistente.isPresent()) {
             Producto producto = productoExistente.get();
