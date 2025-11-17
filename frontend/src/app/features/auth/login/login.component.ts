@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { UsuarioService } from '../../../core/services/usuario.service';
 import { inject, Injectable } from '@angular/core';
 
 
@@ -16,6 +17,7 @@ import { inject, Injectable } from '@angular/core';
 export class LoginComponent implements OnInit {
 
   private authService = inject(AuthService);
+  private usuarioService = inject(UsuarioService);
   miForm!: FormGroup;
   private router = inject(Router);
 
@@ -49,7 +51,17 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.miForm.value as any).subscribe({
       next: () => {
-        this.router.navigate(['/'])
+        // Cargar el nombre del usuario después del login
+        this.usuarioService.getCurrentUsuario().subscribe({
+          next: (usuario) => {
+            this.authService.setUserName(usuario.nombre);
+            this.router.navigate(['/']);
+          },
+          error: (err) => {
+            console.error('Error al obtener usuario:', err);
+            this.router.navigate(['/']);
+          }
+        });
       },
       error: (err) => {
         console.log('ERROR BACKEND:', err);
