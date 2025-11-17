@@ -26,11 +26,14 @@ export class UsuarioService {
     return this.http.get<Usuario>(`${this.urlUsuarios}/${id}`);
   }
 
+  // Obtener el usuario actual
+  getCurrentUsuario(): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.urlUsuarios}/me`);
+  }
+
   // Actualizar un usuario
   updateUsuario(id: number, u: Partial<Usuario>): Observable<Usuario> {
     return this.http.patch<Usuario>(`${this.urlUsuarios}/${id}`, u);
   }
-
-
 
 }

@@ -6,6 +6,7 @@ import { CreateCategoriaComponent } from './admin/pages/gestion-categoria/create
 import { CreateProductosComponent } from './admin/pages/gestion-productos/create-productos/create-productos.component'
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 
+import { authGuard } from './core/guards/auth.guards';
 
 export const routes: Routes = [
 
@@ -23,16 +24,19 @@ export const routes: Routes = [
     {
         path: 'registroUsuario',
         component: RegisterComponent,
+        canActivate: [authGuard],
         title: 'Registro de Usuario',
     },
     {
         path: 'registroCategoria',
         component: CreateCategoriaComponent,
+        canActivate: [authGuard],
         title: 'Registro de Categoría',
     },
     {
         path: 'registroProducto',
         component: CreateProductosComponent,
+        canActivate: [authGuard],
         title: 'Registro de Producto',
     },
     {

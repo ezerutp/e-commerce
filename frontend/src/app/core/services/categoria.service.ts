@@ -12,7 +12,7 @@ export class CategoriaService {
   private urlCategorias = 'http://localhost:8080/api/categorias';
   private urlNuevo = 'http://localhost:8080/api/categorias'
 
-  getProductos(): Observable<any[]> {
+  getCategorias(): Observable<any[]> {
     return this.http.get<any[]>(this.urlCategorias);
   }
 
