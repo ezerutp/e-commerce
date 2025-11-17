@@ -19,8 +19,9 @@ export class CreateProductosComponent implements OnInit {
   private productoService = inject(ProductoService);
   miForm!: FormGroup;
   productos: Producto[] = [];
+  productoEditar: Producto | null = null;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
     this.miForm = this.fb.group({
@@ -43,37 +44,69 @@ export class CreateProductosComponent implements OnInit {
     });
   }
 
+  nuevoProducto() {
+    this.productoEditar = null;
+    this.miForm.reset({ activo: true });
+    const modalElement = document.getElementById('productoModal');
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+    }
+  }
+
+  editarProducto(producto: Producto) {
+    this.productoEditar = producto;
+    this.miForm.patchValue({
+      nombre: producto.nombre,
+      descripcion: producto.descripcion,
+      marca: producto.marca,
+      activo: producto.activo,
+      slug: producto.slug
+    });
+    const modalElement = document.getElementById('productoModal');
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+    }
+  }
+
   onSubmit() {
     if (this.miForm.invalid) {
       this.miForm.markAllAsTouched();
       return;
     }
-
     console.log("Enviando producto:", this.miForm.value);
-
-    this.productoService.createProducto(this.miForm.value).subscribe({
-      next: (data) => {
-        console.log('Producto creado:', data);
+    if (this.productoEditar) {
+      const updatedProducto = { ...this.productoEditar, ...this.miForm.value };
+      this.productoService.updateProducto(updatedProducto.id, updatedProducto).subscribe({
+        next: (data) => {
+          this.mostrarToast('Producto actualizado exitosamente');
+          this.cerrarModal();
+          this.miForm.reset({ activo: true });
+          this.productoEditar = null;
+          this.cargarProductos();
+        },
+        error: (err) => console.error('Error al actualizar producto:', err)
+      });
+    } else {
+      this.productoService.createProducto(this.miForm.value).subscribe({
         
-        // Mostrar toast de éxito
-        this.mostrarToast();
-        
-        // Cerrar modal
-        this.cerrarModal();
-        
-        // Resetear formulario
-        this.miForm.reset({ activo: true });
-        
-        // Recargar lista de productos
-        this.cargarProductos();
-      },
-      error: (err) => console.error('Error al crear producto:', err),
-    });
+        next: (data) => {
+          console.log('Producto creado:', data);
+          this.mostrarToast('Producto creado exitosamente');
+          this.cerrarModal();
+          this.miForm.reset({ activo: true });
+          this.cargarProductos();
+        },
+        error: (err) => console.error('Error al crear producto:', err)
+      });
+    }
   }
 
-  mostrarToast() {
+  mostrarToast(mensaje: string) {
     const toastElement = document.getElementById('successToast');
     if (toastElement) {
+      toastElement.querySelector('.toast-body')!.textContent = mensaje;
       const toast = new bootstrap.Toast(toastElement);
       toast.show();
     }

@@ -7,7 +7,7 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
       <div class="toast-body">
-        Producto creado exitosamente
+        Acción realizada exitosamente
       </div>
     </div>
   </div>
@@ -15,7 +15,7 @@
   <!-- Botón para abrir modal -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Gestión de Productos</h2>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productoModal">
+    <button type="button" class="btn btn-primary" (click)="nuevoProducto()">
       <i class="bi bi-plus-circle"></i> Nuevo Producto
     </button>
   </div>
@@ -34,6 +34,7 @@
               <th>Marca</th>
               <th>Slug</th>
               <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -48,9 +49,14 @@
                   {{ producto.activo ? 'Activo' : 'Inactivo' }}
                 </span>
               </td>
+              <td>
+                <button class="badge bg-warning" (click)="editarProducto(producto)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+              </td>
             </tr>
             <tr *ngIf="productos.length === 0">
-              <td colspan="6" class="text-center text-muted">No hay productos registrados</td>
+              <td colspan="7" class="text-center text-muted">No hay productos registrados</td>
             </tr>
           </tbody>
         </table>
@@ -64,7 +70,9 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="productoModalLabel">Crear Producto</h5>
+        <h5 class="modal-title" id="productoModalLabel">
+          {{ productoEditar ? 'Editar Producto' : 'Crear Producto' }}
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -107,7 +115,9 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary" [disabled]="miForm.invalid">Crear Producto</button>
+            <button type="submit" class="btn btn-primary" [disabled]="miForm.invalid">
+              {{ productoEditar ? 'Actualizar Producto' : 'Crear Producto' }}
+            </button>
           </div>
         </form>
       </div>
