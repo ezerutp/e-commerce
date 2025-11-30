@@ -39,7 +39,7 @@ public class CategoriaController {
 
 	// Obtener una categoría por ID
 	@GetMapping("/{id}")
-	public ResponseEntity<CategoriaResponse> getCategoriaById(@PathVariable Long id) {
+	public ResponseEntity<CategoriaResponse> getCategoriaById(@PathVariable("id") Long id) {
 		Optional<Categoria> categoria = categoriaService.findById(id);
 		if (categoria.isPresent()) {
 			CategoriaResponse response = CategoriaMapper.toResponse(categoria.get());
@@ -60,7 +60,7 @@ public class CategoriaController {
 
 	// Actualizar una categoría existente
 	@PatchMapping("/{id}")
-	public ResponseEntity<CategoriaResponse> updateCategoria(@PathVariable Long id, @Valid @RequestBody CategoriaRequest request) {
+	public ResponseEntity<CategoriaResponse> updateCategoria(@PathVariable("id") Long id, @Valid @RequestBody CategoriaRequest request) {
 		Optional<Categoria> categoriaExistente = categoriaService.findById(id);
 		if (categoriaExistente.isPresent()) {
 			Categoria categoria = categoriaExistente.get();
@@ -83,7 +83,7 @@ public class CategoriaController {
 
 	// Eliminar una categoría por ID
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteCategoria(@PathVariable Long id) {
+	public ResponseEntity<Void> deleteCategoria(@PathVariable("id") Long id) {
 		Optional<Categoria> categoria = categoriaService.findById(id);
 		if (categoria.isPresent()) {
 			categoriaService.deleteById(id);

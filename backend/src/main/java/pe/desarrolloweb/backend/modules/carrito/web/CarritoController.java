@@ -39,7 +39,7 @@ public class CarritoController {
 
 	// Obtener un carrito por ID
 	@GetMapping("/{id}")
-	public ResponseEntity<CarritoResponse> getCarritoById(@PathVariable Long id) {
+	public ResponseEntity<CarritoResponse> getCarritoById(@PathVariable("id") Long id) {
 		Optional<Carrito> carrito = carritoService.findById(id);
 		if (carrito.isPresent()) {
 			CarritoResponse response = CarritoMapper.toResponse(carrito.get());
@@ -60,7 +60,7 @@ public class CarritoController {
 
 	// Actualizar un carrito existente
 	@PatchMapping("/{id}")
-	public ResponseEntity<CarritoResponse> updateCarrito(@PathVariable Long id, @Valid @RequestBody CarritoRequest request) {
+	public ResponseEntity<CarritoResponse> updateCarrito(@PathVariable("id") Long id, @Valid @RequestBody CarritoRequest request) {
 		Optional<Carrito> carritoExistente = carritoService.findById(id);
 		if (carritoExistente.isPresent()) {
 			Carrito carrito = carritoExistente.get();
@@ -98,7 +98,7 @@ public class CarritoController {
 
 	// Eliminar un carrito por ID
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteCarrito(@PathVariable Long id) {
+	public ResponseEntity<Void> deleteCarrito(@PathVariable("id") Long id) {
 		Optional<Carrito> carrito = carritoService.findById(id);
 		if (carrito.isPresent()) {
 			carritoService.deleteById(id);

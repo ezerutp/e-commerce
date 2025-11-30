@@ -30,7 +30,7 @@ public class PedidoItemController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoItemResponse> getPedidoItemById(@PathVariable Long id) {
+    public ResponseEntity<PedidoItemResponse> getPedidoItemById(@PathVariable("id") Long id) {
         Optional<PedidoItem> item = pedidoItemService.findById(id);
         if (item.isPresent()) {
             PedidoItemResponse response = PedidoItemMapper.toResponse(item.get());
@@ -48,7 +48,7 @@ public class PedidoItemController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<PedidoItemResponse> updatePedidoItem(@PathVariable Long id, @Valid @RequestBody PedidoItemRequest request) {
+    public ResponseEntity<PedidoItemResponse> updatePedidoItem(@PathVariable("id") Long id, @Valid @RequestBody PedidoItemRequest request) {
         Optional<PedidoItem> existente = pedidoItemService.findById(id);
         if (existente.isPresent()) {
             PedidoItem item = existente.get();
@@ -79,7 +79,7 @@ public class PedidoItemController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePedidoItem(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePedidoItem(@PathVariable("id") Long id) {
         if (pedidoItemService.findById(id).isPresent()) {
             pedidoItemService.deleteById(id);
             return ResponseEntity.noContent().build();

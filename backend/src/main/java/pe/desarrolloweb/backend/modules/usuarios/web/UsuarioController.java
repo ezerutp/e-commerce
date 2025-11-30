@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +29,7 @@ import pe.desarrolloweb.backend.modules.usuarios.web.dto.UsuarioResponse;
 @RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
 public class UsuarioController {
-    
+
     private final UsuarioService usuarioService;
     private final PasswordEncoder passwordEncoder;
 
@@ -37,6 +39,17 @@ public class UsuarioController {
         return usuarioService.findAll().stream()
                 .map(UsuarioMapper::toResponse)
                 .toList();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<Usuario> getCurrentUsuario() {
+        Usuario usuario = getAuthenticatedUser();
+        Optional<Usuario> usuarioOpt = usuarioService.findById(usuario.getId());
+        if (usuarioOpt.isPresent()) {
+            return ResponseEntity.ok(usuarioOpt.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // Obtener un usuario por ID
@@ -62,11 +75,12 @@ public class UsuarioController {
 
     // Actualizar un usuario existente
     @PatchMapping("/{id}")
-    public ResponseEntity<UsuarioResponse> updateUsuario(@PathVariable("id") Long id, @Valid @RequestBody UsuarioRequest request) {
+    public ResponseEntity<UsuarioResponse> updateUsuario(@PathVariable("id") Long id,
+            @Valid @RequestBody UsuarioRequest request) {
         Optional<Usuario> usuarioExistente = usuarioService.findById(id);
         if (usuarioExistente.isPresent()) {
             Usuario usuario = usuarioExistente.get();
-            
+
             // Actualizar solo los campos que no son null
             if (request.email() != null) {
                 usuario.setEmail(request.email());
@@ -92,7 +106,7 @@ public class UsuarioController {
             if (request.rol() != null) {
                 usuario.setRol(request.rol());
             }
-            
+
             Usuario usuarioActualizado = usuarioService.update(usuario);
             UsuarioResponse response = UsuarioMapper.toResponse(usuarioActualizado);
             return ResponseEntity.ok(response);
@@ -111,6 +125,21 @@ public class UsuarioController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    private Usuario getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+
+        String username = authentication.getName();
+        if (username == null || username.trim().isEmpty()) {
+            return null;
+        }
+
+        var userOptional = usuarioService.findByUsername(username);
+        return userOptional.orElse(null);
     }
 
 }

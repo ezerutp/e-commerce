@@ -39,7 +39,7 @@ public class ProductoCategoriaController {
 
 	// Obtener una relación producto-categoría por ID
 	@GetMapping("/{id}")
-	public ResponseEntity<ProductoCategoriaResponse> getProductoCategoriaById(@PathVariable Long id) {
+	public ResponseEntity<ProductoCategoriaResponse> getProductoCategoriaById(@PathVariable("id") Long id) {
 		Optional<ProductoCategoria> productoCategoria = productoCategoriaService.findById(id);
 		if (productoCategoria.isPresent()) {
 			ProductoCategoriaResponse response = ProductoCategoriaMapper.toResponse(productoCategoria.get());
@@ -60,7 +60,7 @@ public class ProductoCategoriaController {
 
 	// Actualizar una relación producto-categoría existente
 	@PatchMapping("/{id}")
-	public ResponseEntity<ProductoCategoriaResponse> updateProductoCategoria(@PathVariable Long id, @Valid @RequestBody ProductoCategoriaRequest request) {
+	public ResponseEntity<ProductoCategoriaResponse> updateProductoCategoria(@PathVariable("id") Long id, @Valid @RequestBody ProductoCategoriaRequest request) {
 		Optional<ProductoCategoria> existente = productoCategoriaService.findById(id);
 		if (existente.isPresent()) {
 			ProductoCategoria pc = existente.get();
@@ -81,7 +81,7 @@ public class ProductoCategoriaController {
 
 	// Eliminar una relación producto-categoría por ID
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProductoCategoria(@PathVariable Long id) {
+	public ResponseEntity<Void> deleteProductoCategoria(@PathVariable("id") Long id) {
 		Optional<ProductoCategoria> productoCategoria = productoCategoriaService.findById(id);
 		if (productoCategoria.isPresent()) {
 			productoCategoriaService.deleteById(id);

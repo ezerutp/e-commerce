@@ -30,7 +30,7 @@ public class PagoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PagoResponse> getPagoById(@PathVariable Long id) {
+    public ResponseEntity<PagoResponse> getPagoById(@PathVariable("id") Long id) {
         Optional<Pago> pago = pagoService.findById(id);
         if (pago.isPresent()) {
             PagoResponse response = PagoMapper.toResponse(pago.get());
@@ -48,7 +48,7 @@ public class PagoController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<PagoResponse> updatePago(@PathVariable Long id, @Valid @RequestBody PagoRequest request) {
+    public ResponseEntity<PagoResponse> updatePago(@PathVariable("id") Long id, @Valid @RequestBody PagoRequest request) {
         Optional<Pago> existente = pagoService.findById(id);
         if (existente.isPresent()) {
             Pago pago = existente.get();
@@ -88,7 +88,7 @@ public class PagoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePago(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePago(@PathVariable("id") Long id) {
         if (pagoService.findById(id).isPresent()) {
             pagoService.deleteById(id);
             return ResponseEntity.noContent().build();

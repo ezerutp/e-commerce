@@ -32,7 +32,7 @@ public class PedidoController {
 
     // Obtener un pedido por ID
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoResponse> getPedidoById(@PathVariable Long id) {
+    public ResponseEntity<PedidoResponse> getPedidoById(@PathVariable("id") Long id) {
         Optional<Pedido> pedido = pedidoService.findById(id);
         if (pedido.isPresent()) {
             PedidoResponse response = PedidoMapper.toResponse(pedido.get());
@@ -52,7 +52,7 @@ public class PedidoController {
 
     // Actualizar un pedido existente
     @PatchMapping("/{id}")
-    public ResponseEntity<PedidoResponse> updatePedido(@PathVariable Long id, @Valid @RequestBody PedidoRequest request) {
+    public ResponseEntity<PedidoResponse> updatePedido(@PathVariable("id") Long id, @Valid @RequestBody PedidoRequest request) {
         Optional<Pedido> existente = pedidoService.findById(id);
         if (existente.isPresent()) {
             Pedido pedido = existente.get();
@@ -87,7 +87,7 @@ public class PedidoController {
 
     // Eliminar un pedido
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePedido(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePedido(@PathVariable("id") Long id) {
         Optional<Pedido> pedido = pedidoService.findById(id);
         if (pedido.isPresent()) {
             pedidoService.deleteById(id);
