@@ -1,0 +1,32 @@
+.bg-prof {
+  background-color: #1a1a2e; 
+}
+
+.navbar .nav-link {
+  color: #ffffff;
+  transition: color 0.2s;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: #ff9800;
+}
+
+.navbar-nav .separator {
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+  height: 30px;
+  margin: 0 15px;
+}
+
+.navbar .btn-outline-light {
+  border-color: #ffffff;
+  color: #ffffff;
+  transition: all 0.2s;
+}
+
+.navbar .btn-outline-light:hover {
+  background-color: #ff9800;
+  border-color: #ff9800;
+  color: #1a1a2e;
+}
+
