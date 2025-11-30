@@ -2,8 +2,6 @@ package pe.desarrolloweb.backend.modules.inventario.domain;
 
 import java.time.LocalTime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,7 +17,9 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import pe.desarrolloweb.backend.modules.catalago.domain.Variante;
 
 @Entity
@@ -34,7 +34,8 @@ public class Inventario {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @NotNull(message = "La variante no puede ser nula")
     @JoinColumn(name = "variante_id", nullable = false, foreignKey = @ForeignKey(name = "fk_inventario_variante"))
     private Variante variante;

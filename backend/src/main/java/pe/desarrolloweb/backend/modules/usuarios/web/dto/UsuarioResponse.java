@@ -8,6 +8,7 @@ import pe.desarrolloweb.backend.shared.enums.RolUsuario;
 public record UsuarioResponse(
     Long id,
     String email,
+    String username,
     String nombre,
     String apellido,
     String telefono,

@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import pe.desarrolloweb.backend.modules.catalago.domain.Producto;
+import pe.desarrolloweb.backend.modules.catalago.mapper.ProductoMapper;
 import pe.desarrolloweb.backend.modules.catalago.service.ProductoService;
+import pe.desarrolloweb.backend.modules.catalago.web.dto.ProductoRequest;
+import pe.desarrolloweb.backend.modules.catalago.web.dto.ProductoResponse;
 
 @RestController
 @RequestMapping("/api/productos")
@@ -27,16 +31,19 @@ public class ProductoController {
 
     // Obtener todos los productos
     @GetMapping
-    public List<Producto> getAllProductos() {
-        return productoService.findAll();
+    public List<ProductoResponse> getAllProductos() {
+        return productoService.findAll().stream()
+                .map(ProductoMapper::toResponse)
+                .toList();
     }
 
     // Obtener un producto por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> getProductoById(@PathVariable Long id) {
+    public ResponseEntity<ProductoResponse> getProductoById(@PathVariable Long id) {
         Optional<Producto> producto = productoService.findById(id);
         if (producto.isPresent()) {
-            return ResponseEntity.ok(producto.get());
+            ProductoResponse response = ProductoMapper.toResponse(producto.get());
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -44,34 +51,37 @@ public class ProductoController {
 
     // Crear un nuevo producto
     @PostMapping
-    public ResponseEntity<Producto> createProducto(@RequestBody Producto producto) {
+    public ResponseEntity<ProductoResponse> createProducto(@Valid @RequestBody ProductoRequest request) {
+        Producto producto = ProductoMapper.toEntity(request);
         Producto nuevoProducto = productoService.save(producto);
-        return new ResponseEntity<>(nuevoProducto, HttpStatus.CREATED);
+        ProductoResponse response = ProductoMapper.toResponse(nuevoProducto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // Actualizar un producto existente
     @PatchMapping("/{id}")
-    public ResponseEntity<Producto> updateProducto(@PathVariable Long id, @RequestBody Producto productoDetalles) {
+    public ResponseEntity<ProductoResponse> updateProducto(@PathVariable Long id, @Valid @RequestBody ProductoRequest request) {
         Optional<Producto> productoExistente = productoService.findById(id);
         if (productoExistente.isPresent()) {
             Producto producto = productoExistente.get();
-            if (productoDetalles.getNombre() != null) {
-                producto.setNombre(productoDetalles.getNombre());
+            if (request.nombre() != null) {
+                producto.setNombre(request.nombre());
             }
-            if (productoDetalles.getDescripcion() != null) {
-                producto.setDescripcion(productoDetalles.getDescripcion());
+            if (request.descripcion() != null) {
+                producto.setDescripcion(request.descripcion());
             }
-            if (productoDetalles.getMarca() != null) {
-                producto.setMarca(productoDetalles.getMarca());
+            if (request.marca() != null) {
+                producto.setMarca(request.marca());
             }
-            if (productoDetalles.getActivo() != null) {
-                producto.setActivo(productoDetalles.getActivo());
+            if (request.activo() != null) {
+                producto.setActivo(request.activo());
             }
-            if (productoDetalles.getSlug() != null) {
-                producto.setSlug(productoDetalles.getSlug());
+            if (request.slug() != null) {
+                producto.setSlug(request.slug());
             }
             Producto productoActualizado = productoService.save(producto);
-            return ResponseEntity.ok(productoActualizado);
+            ProductoResponse response = ProductoMapper.toResponse(productoActualizado);
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.notFound().build();
         }

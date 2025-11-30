@@ -29,10 +29,13 @@ public class Usuario {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(unique = true, nullable = false)
+    private String username;
+
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(max = 255, message = "La contraseña no puede exceder 255 caracteres")
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 120, message = "El nombre no puede exceder 120 caracteres")

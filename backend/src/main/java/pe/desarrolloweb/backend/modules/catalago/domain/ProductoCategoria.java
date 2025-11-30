@@ -2,8 +2,6 @@ package pe.desarrolloweb.backend.modules.catalago.domain;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,7 +17,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "producto_categorias", uniqueConstraints = @UniqueConstraint(name = "uk_producto_categoria", columnNames = {
@@ -34,12 +34,14 @@ public class ProductoCategoria {
     private Long id;
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JoinColumn(name = "producto_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pc_producto"))
     private Producto producto;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JoinColumn(name = "categoria_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pc_categoria"))
     private Categoria categoria;
 

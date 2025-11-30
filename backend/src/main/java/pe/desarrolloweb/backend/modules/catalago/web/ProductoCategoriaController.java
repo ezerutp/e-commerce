@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import pe.desarrolloweb.backend.modules.catalago.domain.ProductoCategoria;
+import pe.desarrolloweb.backend.modules.catalago.mapper.ProductoCategoriaMapper;
 import pe.desarrolloweb.backend.modules.catalago.service.ProductoCategoriaService;
+import pe.desarrolloweb.backend.modules.catalago.web.dto.ProductoCategoriaRequest;
+import pe.desarrolloweb.backend.modules.catalago.web.dto.ProductoCategoriaResponse;
 
 @RestController
 @RequestMapping("/api/producto-categorias")
@@ -27,16 +31,19 @@ public class ProductoCategoriaController {
 
 	// Obtener todas las relaciones producto-categoría
 	@GetMapping
-	public List<ProductoCategoria> getAllProductoCategorias() {
-		return productoCategoriaService.findAll();
+	public List<ProductoCategoriaResponse> getAllProductoCategorias() {
+		return productoCategoriaService.findAll().stream()
+				.map(ProductoCategoriaMapper::toResponse)
+				.toList();
 	}
 
 	// Obtener una relación producto-categoría por ID
 	@GetMapping("/{id}")
-	public ResponseEntity<ProductoCategoria> getProductoCategoriaById(@PathVariable Long id) {
+	public ResponseEntity<ProductoCategoriaResponse> getProductoCategoriaById(@PathVariable Long id) {
 		Optional<ProductoCategoria> productoCategoria = productoCategoriaService.findById(id);
 		if (productoCategoria.isPresent()) {
-			return ResponseEntity.ok(productoCategoria.get());
+			ProductoCategoriaResponse response = ProductoCategoriaMapper.toResponse(productoCategoria.get());
+			return ResponseEntity.ok(response);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -44,20 +51,29 @@ public class ProductoCategoriaController {
 
 	// Crear una nueva relación producto-categoría
 	@PostMapping
-	public ResponseEntity<ProductoCategoria> createProductoCategoria(@RequestBody ProductoCategoria productoCategoria) {
+	public ResponseEntity<ProductoCategoriaResponse> createProductoCategoria(@Valid @RequestBody ProductoCategoriaRequest request) {
+		ProductoCategoria productoCategoria = ProductoCategoriaMapper.toEntity(request);
 		ProductoCategoria nuevaProductoCategoria = productoCategoriaService.save(productoCategoria);
-		return new ResponseEntity<>(nuevaProductoCategoria, HttpStatus.CREATED);
+		ProductoCategoriaResponse response = ProductoCategoriaMapper.toResponse(nuevaProductoCategoria);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
 	// Actualizar una relación producto-categoría existente
 	@PatchMapping("/{id}")
-	public ResponseEntity<ProductoCategoria> updateProductoCategoria(@PathVariable Long id, @RequestBody ProductoCategoria detalles) {
+	public ResponseEntity<ProductoCategoriaResponse> updateProductoCategoria(@PathVariable Long id, @Valid @RequestBody ProductoCategoriaRequest request) {
 		Optional<ProductoCategoria> existente = productoCategoriaService.findById(id);
 		if (existente.isPresent()) {
 			ProductoCategoria pc = existente.get();
-			// No se actualizan producto ni categoria por integridad relacional
+			// Actualizar las relaciones si se proporcionan
+			if (request.productoId() != null) {
+				pc.getProducto().setId(request.productoId());
+			}
+			if (request.categoriaId() != null) {
+				pc.getCategoria().setId(request.categoriaId());
+			}
 			ProductoCategoria actualizado = productoCategoriaService.save(pc);
-			return ResponseEntity.ok(actualizado);
+			ProductoCategoriaResponse response = ProductoCategoriaMapper.toResponse(actualizado);
+			return ResponseEntity.ok(response);
 		} else {
 			return ResponseEntity.notFound().build();
 		}

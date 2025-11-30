@@ -2,6 +2,7 @@ package pe.desarrolloweb.backend.config.seeders;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import pe.desarrolloweb.backend.modules.usuarios.domain.Usuario;
@@ -14,9 +15,11 @@ import pe.desarrolloweb.backend.shared.enums.RolUsuario;
 public class DataSeederUsuarios implements CommandLineRunner {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataSeederUsuarios(UsuarioRepository usuarioRepository) {
+    public DataSeederUsuarios(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -30,7 +33,8 @@ public class DataSeederUsuarios implements CommandLineRunner {
             // Usuario 1 - Administrador
             Usuario admin = new Usuario();
             admin.setEmail("admin@ecommerce.com");
-            admin.setPasswordHash("admin123");
+            admin.setUsername("admin");
+            admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setNombre("Carlos");
             admin.setApellido("Administrador");
             admin.setTelefono("987654321");
@@ -41,7 +45,8 @@ public class DataSeederUsuarios implements CommandLineRunner {
             // Usuario 2 - Moderador
             Usuario moderador = new Usuario();
             moderador.setEmail("moderador@ecommerce.com");
-            moderador.setPasswordHash("moderador123");
+            moderador.setUsername("moderador");
+            moderador.setPassword(passwordEncoder.encode("moderador123"));
             moderador.setNombre("Ana");
             moderador.setApellido("Moderadora");
             moderador.setTelefono("987654322");
@@ -52,7 +57,8 @@ public class DataSeederUsuarios implements CommandLineRunner {
             // Usuario 3 - Usuario simple activo
             Usuario usuario1 = new Usuario();
             usuario1.setEmail("juan.perez@email.com");
-            usuario1.setPasswordHash("usuario123");
+            usuario1.setUsername("juan.perez");
+            usuario1.setPassword(passwordEncoder.encode("usuario123"));
             usuario1.setNombre("Juan");
             usuario1.setApellido("Pérez");
             usuario1.setTelefono("987654323");
@@ -63,7 +69,8 @@ public class DataSeederUsuarios implements CommandLineRunner {
             // Usuario 4 - Usuario simple y suspendido
             Usuario usuario2 = new Usuario();
             usuario2.setEmail("maria.garcia@email.com");
-            usuario2.setPasswordHash("usuario456");
+            usuario2.setUsername("maria.garcia");
+            usuario2.setPassword(passwordEncoder.encode("usuario456"));
             usuario2.setNombre("María");
             usuario2.setApellido("García");
             usuario2.setTelefono("987654324");

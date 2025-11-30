@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import pe.desarrolloweb.backend.modules.catalago.domain.Categoria;
+import pe.desarrolloweb.backend.modules.catalago.mapper.CategoriaMapper;
 import pe.desarrolloweb.backend.modules.catalago.service.CategoriaService;
+import pe.desarrolloweb.backend.modules.catalago.web.dto.CategoriaRequest;
+import pe.desarrolloweb.backend.modules.catalago.web.dto.CategoriaResponse;
 
 @RestController
 @RequestMapping("/api/categorias")
@@ -27,16 +31,19 @@ public class CategoriaController {
 
 	// Obtener todas las categorías
 	@GetMapping
-	public List<Categoria> getAllCategorias() {
-		return categoriaService.findAll();
+	public List<CategoriaResponse> getAllCategorias() {
+		return categoriaService.findAll().stream()
+				.map(CategoriaMapper::toResponse)
+				.toList();
 	}
 
 	// Obtener una categoría por ID
 	@GetMapping("/{id}")
-	public ResponseEntity<Categoria> getCategoriaById(@PathVariable Long id) {
+	public ResponseEntity<CategoriaResponse> getCategoriaById(@PathVariable Long id) {
 		Optional<Categoria> categoria = categoriaService.findById(id);
 		if (categoria.isPresent()) {
-			return ResponseEntity.ok(categoria.get());
+			CategoriaResponse response = CategoriaMapper.toResponse(categoria.get());
+			return ResponseEntity.ok(response);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -44,28 +51,31 @@ public class CategoriaController {
 
 	// Crear una nueva categoría
 	@PostMapping
-	public ResponseEntity<Categoria> createCategoria(@RequestBody Categoria categoria) {
+	public ResponseEntity<CategoriaResponse> createCategoria(@Valid @RequestBody CategoriaRequest request) {
+		Categoria categoria = CategoriaMapper.toEntity(request);
 		Categoria nuevaCategoria = categoriaService.save(categoria);
-		return new ResponseEntity<>(nuevaCategoria, HttpStatus.CREATED);
+		CategoriaResponse response = CategoriaMapper.toResponse(nuevaCategoria);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
 	// Actualizar una categoría existente
 	@PatchMapping("/{id}")
-	public ResponseEntity<Categoria> updateCategoria(@PathVariable Long id, @RequestBody Categoria categoriaDetalles) {
+	public ResponseEntity<CategoriaResponse> updateCategoria(@PathVariable Long id, @Valid @RequestBody CategoriaRequest request) {
 		Optional<Categoria> categoriaExistente = categoriaService.findById(id);
 		if (categoriaExistente.isPresent()) {
 			Categoria categoria = categoriaExistente.get();
-			if (categoriaDetalles.getNombre() != null) {
-				categoria.setNombre(categoriaDetalles.getNombre());
+			if (request.nombre() != null) {
+				categoria.setNombre(request.nombre());
 			}
-			if (categoriaDetalles.getDescripcion() != null) {
-				categoria.setDescripcion(categoriaDetalles.getDescripcion());
+			if (request.descripcion() != null) {
+				categoria.setDescripcion(request.descripcion());
 			}
-			if (categoriaDetalles.getSlug() != null) {
-				categoria.setSlug(categoriaDetalles.getSlug());
+			if (request.slug() != null) {
+				categoria.setSlug(request.slug());
 			}
 			Categoria categoriaActualizada = categoriaService.save(categoria);
-			return ResponseEntity.ok(categoriaActualizada);
+			CategoriaResponse response = CategoriaMapper.toResponse(categoriaActualizada);
+			return ResponseEntity.ok(response);
 		} else {
 			return ResponseEntity.notFound().build();
 		}

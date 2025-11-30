@@ -8,8 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import pe.desarrolloweb.backend.modules.pedidos.domain.PedidoItem;
+import pe.desarrolloweb.backend.modules.pedidos.mapper.PedidoItemMapper;
 import pe.desarrolloweb.backend.modules.pedidos.service.PedidoItemService;
+import pe.desarrolloweb.backend.modules.pedidos.web.dto.PedidoItemRequest;
+import pe.desarrolloweb.backend.modules.pedidos.web.dto.PedidoItemResponse;
 
 @RestController
 @RequestMapping("/api/pedido-items")
@@ -19,36 +23,57 @@ public class PedidoItemController {
     private PedidoItemService pedidoItemService;
 
     @GetMapping
-    public List<PedidoItem> getAllPedidoItems() {
-        return pedidoItemService.findAll();
+    public List<PedidoItemResponse> getAllPedidoItems() {
+        return pedidoItemService.findAll().stream()
+                .map(PedidoItemMapper::toResponse)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoItem> getPedidoItemById(@PathVariable Long id) {
+    public ResponseEntity<PedidoItemResponse> getPedidoItemById(@PathVariable Long id) {
         Optional<PedidoItem> item = pedidoItemService.findById(id);
-        return item.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (item.isPresent()) {
+            PedidoItemResponse response = PedidoItemMapper.toResponse(item.get());
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<PedidoItem> createPedidoItem(@RequestBody PedidoItem pedidoItem) {
+    public ResponseEntity<PedidoItemResponse> createPedidoItem(@Valid @RequestBody PedidoItemRequest request) {
+        PedidoItem pedidoItem = PedidoItemMapper.toEntity(request);
         PedidoItem nuevo = pedidoItemService.save(pedidoItem);
-        return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
+        PedidoItemResponse response = PedidoItemMapper.toResponse(nuevo);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<PedidoItem> updatePedidoItem(@PathVariable Long id, @RequestBody PedidoItem detalles) {
+    public ResponseEntity<PedidoItemResponse> updatePedidoItem(@PathVariable Long id, @Valid @RequestBody PedidoItemRequest request) {
         Optional<PedidoItem> existente = pedidoItemService.findById(id);
         if (existente.isPresent()) {
             PedidoItem item = existente.get();
-            if (detalles.getPedido() != null) item.setPedido(detalles.getPedido());
-            if (detalles.getVariante() != null) item.setVariante(detalles.getVariante());
-            if (detalles.getSkuSnapshot() != null) item.setSkuSnapshot(detalles.getSkuSnapshot());
-            if (detalles.getNombreProductoSnapshot() != null) item.setNombreProductoSnapshot(detalles.getNombreProductoSnapshot());
-            if (detalles.getPrecioUnitario() != null) item.setPrecioUnitario(detalles.getPrecioUnitario());
-            if (detalles.getCantidad() != null) item.setCantidad(detalles.getCantidad());
+            if (request.pedidoId() != null) {
+                item.getPedido().setId(request.pedidoId());
+            }
+            if (request.varianteId() != null) {
+                item.getVariante().setId(request.varianteId());
+            }
+            if (request.skuSnapshot() != null) {
+                item.setSkuSnapshot(request.skuSnapshot());
+            }
+            if (request.nombreProductoSnapshot() != null) {
+                item.setNombreProductoSnapshot(request.nombreProductoSnapshot());
+            }
+            if (request.precioUnitario() != null) {
+                item.setPrecioUnitario(request.precioUnitario());
+            }
+            if (request.cantidad() != null) {
+                item.setCantidad(request.cantidad());
+            }
 
             PedidoItem actualizado = pedidoItemService.save(item);
-            return ResponseEntity.ok(actualizado);
+            PedidoItemResponse response = PedidoItemMapper.toResponse(actualizado);
+            return ResponseEntity.ok(response);
         }
         return ResponseEntity.notFound().build();
     }

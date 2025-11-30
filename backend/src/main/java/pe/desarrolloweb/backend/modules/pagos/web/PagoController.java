@@ -8,8 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import pe.desarrolloweb.backend.modules.pagos.domain.Pago;
+import pe.desarrolloweb.backend.modules.pagos.mapper.PagoMapper;
 import pe.desarrolloweb.backend.modules.pagos.service.PagoService;
+import pe.desarrolloweb.backend.modules.pagos.web.dto.PagoRequest;
+import pe.desarrolloweb.backend.modules.pagos.web.dto.PagoResponse;
 
 @RestController
 @RequestMapping("/api/pagos")
@@ -19,39 +23,66 @@ public class PagoController {
     private PagoService pagoService;
 
     @GetMapping
-    public List<Pago> getAllPagos() {
-        return pagoService.findAll();
+    public List<PagoResponse> getAllPagos() {
+        return pagoService.findAll().stream()
+                .map(PagoMapper::toResponse)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pago> getPagoById(@PathVariable Long id) {
+    public ResponseEntity<PagoResponse> getPagoById(@PathVariable Long id) {
         Optional<Pago> pago = pagoService.findById(id);
-        return pago.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (pago.isPresent()) {
+            PagoResponse response = PagoMapper.toResponse(pago.get());
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<Pago> createPago(@RequestBody Pago pago) {
+    public ResponseEntity<PagoResponse> createPago(@Valid @RequestBody PagoRequest request) {
+        Pago pago = PagoMapper.toEntity(request);
         Pago nuevo = pagoService.save(pago);
-        return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
+        PagoResponse response = PagoMapper.toResponse(nuevo);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Pago> updatePago(@PathVariable Long id, @RequestBody Pago detalles) {
+    public ResponseEntity<PagoResponse> updatePago(@PathVariable Long id, @Valid @RequestBody PagoRequest request) {
         Optional<Pago> existente = pagoService.findById(id);
         if (existente.isPresent()) {
             Pago pago = existente.get();
-            if (detalles.getPedido() != null) pago.setPedido(detalles.getPedido());
-            if (detalles.getMetodo() != null) pago.setMetodo(detalles.getMetodo());
-            if (detalles.getProveedor() != null) pago.setProveedor(detalles.getProveedor());
-            if (detalles.getMonto() != null) pago.setMonto(detalles.getMonto());
-            if (detalles.getMoneda() != null) pago.setMoneda(detalles.getMoneda());
-            if (detalles.getEstado() != null) pago.setEstado(detalles.getEstado());
-            if (detalles.getReferenciaProveedor() != null) pago.setReferenciaProveedor(detalles.getReferenciaProveedor());
-            if (detalles.getAutorizadoEn() != null) pago.setAutorizadoEn(detalles.getAutorizadoEn());
-            if (detalles.getCapturadoEn() != null) pago.setCapturadoEn(detalles.getCapturadoEn());
+            if (request.pedidoId() != null) {
+                pago.getPedido().setId(request.pedidoId());
+            }
+            if (request.metodo() != null) {
+                pago.setMetodo(request.metodo());
+            }
+            if (request.proveedor() != null) {
+                pago.setProveedor(request.proveedor());
+            }
+            if (request.monto() != null) {
+                pago.setMonto(request.monto());
+            }
+            if (request.moneda() != null) {
+                pago.setMoneda(request.moneda());
+            }
+            if (request.estado() != null) {
+                pago.setEstado(request.estado());
+            }
+            if (request.referenciaProveedor() != null) {
+                pago.setReferenciaProveedor(request.referenciaProveedor());
+            }
+            if (request.autorizadoEn() != null) {
+                pago.setAutorizadoEn(request.autorizadoEn());
+            }
+            if (request.capturadoEn() != null) {
+                pago.setCapturadoEn(request.capturadoEn());
+            }
 
             Pago actualizado = pagoService.save(pago);
-            return ResponseEntity.ok(actualizado);
+            PagoResponse response = PagoMapper.toResponse(actualizado);
+            return ResponseEntity.ok(response);
         }
         return ResponseEntity.notFound().build();
     }

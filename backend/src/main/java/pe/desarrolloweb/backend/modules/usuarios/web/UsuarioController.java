@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import pe.desarrolloweb.backend.modules.usuarios.domain.Usuario;
 import pe.desarrolloweb.backend.modules.usuarios.mapper.UsuarioMapper;
 import pe.desarrolloweb.backend.modules.usuarios.service.UsuarioService;
+import pe.desarrolloweb.backend.modules.usuarios.web.dto.UsuarioRequest;
 import pe.desarrolloweb.backend.modules.usuarios.web.dto.UsuarioResponse;
 
 @RestController
@@ -49,7 +51,8 @@ public class UsuarioController {
 
     // Crear un nuevo usuario
     @PostMapping
-    public ResponseEntity<UsuarioResponse> createUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<UsuarioResponse> createUsuario(@Valid @RequestBody UsuarioRequest request) {
+        Usuario usuario = UsuarioMapper.toEntity(request);
         Usuario nuevoUsuario = usuarioService.save(usuario);
         UsuarioResponse response = UsuarioMapper.toResponse(nuevoUsuario);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -57,32 +60,35 @@ public class UsuarioController {
 
     // Actualizar un usuario existente
     @PatchMapping("/{id}")
-    public ResponseEntity<UsuarioResponse> updateUsuario(@PathVariable("id") Long id, @RequestBody Usuario usuarioDetalles) {
+    public ResponseEntity<UsuarioResponse> updateUsuario(@PathVariable("id") Long id, @Valid @RequestBody UsuarioRequest request) {
         Optional<Usuario> usuarioExistente = usuarioService.findById(id);
         if (usuarioExistente.isPresent()) {
             Usuario usuario = usuarioExistente.get();
             
             // Actualizar solo los campos que no son null
-            if (usuarioDetalles.getEmail() != null) {
-                usuario.setEmail(usuarioDetalles.getEmail());
+            if (request.email() != null) {
+                usuario.setEmail(request.email());
             }
-            if (usuarioDetalles.getPasswordHash() != null) {
-                usuario.setPasswordHash(usuarioDetalles.getPasswordHash());
+            if (request.username() != null) {
+                usuario.setUsername(request.username());
             }
-            if (usuarioDetalles.getNombre() != null) {
-                usuario.setNombre(usuarioDetalles.getNombre());
+            if (request.password() != null) {
+                usuario.setPassword(request.password());
             }
-            if (usuarioDetalles.getApellido() != null) {
-                usuario.setApellido(usuarioDetalles.getApellido());
+            if (request.nombre() != null) {
+                usuario.setNombre(request.nombre());
             }
-            if (usuarioDetalles.getTelefono() != null) {
-                usuario.setTelefono(usuarioDetalles.getTelefono());
+            if (request.apellido() != null) {
+                usuario.setApellido(request.apellido());
             }
-            if (usuarioDetalles.getEstado() != null) {
-                usuario.setEstado(usuarioDetalles.getEstado());
+            if (request.telefono() != null) {
+                usuario.setTelefono(request.telefono());
             }
-            if (usuarioDetalles.getRol() != null) {
-                usuario.setRol(usuarioDetalles.getRol());
+            if (request.estado() != null) {
+                usuario.setEstado(request.estado());
+            }
+            if (request.rol() != null) {
+                usuario.setRol(request.rol());
             }
             
             Usuario usuarioActualizado = usuarioService.save(usuario);

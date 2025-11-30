@@ -8,8 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import pe.desarrolloweb.backend.modules.pedidos.domain.Pedido;
+import pe.desarrolloweb.backend.modules.pedidos.mapper.PedidoMapper;
 import pe.desarrolloweb.backend.modules.pedidos.service.PedidoService;
+import pe.desarrolloweb.backend.modules.pedidos.web.dto.PedidoRequest;
+import pe.desarrolloweb.backend.modules.pedidos.web.dto.PedidoResponse;
 
 @RestController
 @RequestMapping("/api/pedidos")
@@ -20,39 +24,63 @@ public class PedidoController {
 
     // Obtener todos los pedidos
     @GetMapping
-    public List<Pedido> getAllPedidos() {
-        return pedidoService.findAll();
+    public List<PedidoResponse> getAllPedidos() {
+        return pedidoService.findAll().stream()
+                .map(PedidoMapper::toResponse)
+                .toList();
     }
 
     // Obtener un pedido por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Pedido> getPedidoById(@PathVariable Long id) {
+    public ResponseEntity<PedidoResponse> getPedidoById(@PathVariable Long id) {
         Optional<Pedido> pedido = pedidoService.findById(id);
-        return pedido.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (pedido.isPresent()) {
+            PedidoResponse response = PedidoMapper.toResponse(pedido.get());
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     // Crear un nuevo pedido
     @PostMapping
-    public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido) {
+    public ResponseEntity<PedidoResponse> createPedido(@Valid @RequestBody PedidoRequest request) {
+        Pedido pedido = PedidoMapper.toEntity(request);
         Pedido nuevoPedido = pedidoService.save(pedido);
-        return new ResponseEntity<>(nuevoPedido, HttpStatus.CREATED);
+        PedidoResponse response = PedidoMapper.toResponse(nuevoPedido);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // Actualizar un pedido existente
     @PatchMapping("/{id}")
-    public ResponseEntity<Pedido> updatePedido(@PathVariable Long id, @RequestBody Pedido pedidoDetalles) {
+    public ResponseEntity<PedidoResponse> updatePedido(@PathVariable Long id, @Valid @RequestBody PedidoRequest request) {
         Optional<Pedido> existente = pedidoService.findById(id);
         if (existente.isPresent()) {
             Pedido pedido = existente.get();
-            if (pedidoDetalles.getUsuario() != null) pedido.setUsuario(pedidoDetalles.getUsuario());
-            if (pedidoDetalles.getNumeroOrden() != null) pedido.setNumeroOrden(pedidoDetalles.getNumeroOrden());
-            if (pedidoDetalles.getMoneda() != null) pedido.setMoneda(pedidoDetalles.getMoneda());
-            if (pedidoDetalles.getEstado() != null) pedido.setEstado(pedidoDetalles.getEstado());
-            if (pedidoDetalles.getSubtotal() != null) pedido.setSubtotal(pedidoDetalles.getSubtotal());
-            if (pedidoDetalles.getImpuestos() != null) pedido.setImpuestos(pedidoDetalles.getImpuestos());
-            if (pedidoDetalles.getTotal() != null) pedido.setTotal(pedidoDetalles.getTotal());
+            if (request.usuarioId() != null) {
+                pedido.getUsuario().setId(request.usuarioId());
+            }
+            if (request.numeroOrden() != null) {
+                pedido.setNumeroOrden(request.numeroOrden());
+            }
+            if (request.moneda() != null) {
+                pedido.setMoneda(request.moneda());
+            }
+            if (request.estado() != null) {
+                pedido.setEstado(request.estado());
+            }
+            if (request.subtotal() != null) {
+                pedido.setSubtotal(request.subtotal());
+            }
+            if (request.impuestos() != null) {
+                pedido.setImpuestos(request.impuestos());
+            }
+            if (request.total() != null) {
+                pedido.setTotal(request.total());
+            }
 
-            return ResponseEntity.ok(pedidoService.save(pedido));
+            Pedido actualizado = pedidoService.save(pedido);
+            PedidoResponse response = PedidoMapper.toResponse(actualizado);
+            return ResponseEntity.ok(response);
         }
         return ResponseEntity.notFound().build();
     }
