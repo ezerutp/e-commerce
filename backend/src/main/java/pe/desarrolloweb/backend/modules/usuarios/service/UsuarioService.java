@@ -3,6 +3,7 @@ package pe.desarrolloweb.backend.modules.usuarios.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import pe.desarrolloweb.backend.modules.usuarios.repo.UsuarioRepository;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
@@ -23,7 +25,12 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
     }
 
-    public Usuario save(Usuario usuario) {
+    public Usuario create(Usuario usuario) {
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        return usuarioRepository.save(usuario);
+    }
+
+    public Usuario update(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
 

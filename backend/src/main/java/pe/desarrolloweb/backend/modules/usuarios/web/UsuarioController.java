@@ -3,9 +3,9 @@ package pe.desarrolloweb.backend.modules.usuarios.web;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import pe.desarrolloweb.backend.modules.usuarios.domain.Usuario;
 import pe.desarrolloweb.backend.modules.usuarios.mapper.UsuarioMapper;
 import pe.desarrolloweb.backend.modules.usuarios.service.UsuarioService;
@@ -24,10 +25,11 @@ import pe.desarrolloweb.backend.modules.usuarios.web.dto.UsuarioResponse;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@RequiredArgsConstructor
 public class UsuarioController {
     
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+    private final PasswordEncoder passwordEncoder;
 
     // Obtener todos los usuarios
     @GetMapping
@@ -53,7 +55,7 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<UsuarioResponse> createUsuario(@Valid @RequestBody UsuarioRequest request) {
         Usuario usuario = UsuarioMapper.toEntity(request);
-        Usuario nuevoUsuario = usuarioService.save(usuario);
+        Usuario nuevoUsuario = usuarioService.create(usuario);
         UsuarioResponse response = UsuarioMapper.toResponse(nuevoUsuario);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -73,7 +75,7 @@ public class UsuarioController {
                 usuario.setUsername(request.username());
             }
             if (request.password() != null) {
-                usuario.setPassword(request.password());
+                usuario.setPassword(passwordEncoder.encode(request.password()));
             }
             if (request.nombre() != null) {
                 usuario.setNombre(request.nombre());
@@ -91,7 +93,7 @@ public class UsuarioController {
                 usuario.setRol(request.rol());
             }
             
-            Usuario usuarioActualizado = usuarioService.save(usuario);
+            Usuario usuarioActualizado = usuarioService.update(usuario);
             UsuarioResponse response = UsuarioMapper.toResponse(usuarioActualizado);
             return ResponseEntity.ok(response);
         } else {
