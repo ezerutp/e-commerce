@@ -17,6 +17,7 @@ export class CreateCategoriaComponent implements OnInit {
   private categoriaService = inject(CategoriaService);
   miForm!: FormGroup;
   categorias: Categoria[] = [];
+  rol = localStorage.getItem('rol');
 
   constructor(private fb: FormBuilder) {}
 

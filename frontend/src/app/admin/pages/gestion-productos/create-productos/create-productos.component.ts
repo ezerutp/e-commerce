@@ -20,6 +20,7 @@ export class CreateProductosComponent implements OnInit {
   miForm!: FormGroup;
   productos: Producto[] = [];
   productoEditar: Producto | null = null;
+  rol = localStorage.getItem('rol');
 
   constructor(private fb: FormBuilder) { }
 
