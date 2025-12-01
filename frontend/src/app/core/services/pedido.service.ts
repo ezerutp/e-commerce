@@ -24,6 +24,8 @@ export class PedidoService {
 
   crearPedidoCompleto(items: CarritoItem[], usuarioId: number): Observable<Pedido> {
     const subtotal = items.reduce((sum, item) => sum + (item.precioUnitario * item.cantidad), 0);
+    const impuestos = 0; // Por ahora sin impuestos
+    const total = subtotal + impuestos;
     
     // Preparar los datos del pedido
     const pedidoData = {
@@ -31,7 +33,8 @@ export class PedidoService {
       numeroOrden: this.generarNumeroOrden(),
       estado: 'PENDIENTE',
       subtotal: subtotal,
-      total: subtotal,
+      impuestos: impuestos,
+      total: total,
       moneda: 'USD'
     };
 

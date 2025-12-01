@@ -64,7 +64,7 @@ export class CheckoutComponent {
             
             this.carritoService.clearCart();
             this.cargarCarrito();
-            this.router.navigate(['/pedidos-confirmacion', pedidoCreado.id]);
+            this.router.navigate(['/listaProductos']);
           },
           error: (error) => {
             console.error('Error al procesar la compra:', error);
