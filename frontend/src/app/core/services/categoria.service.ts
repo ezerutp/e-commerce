@@ -9,8 +9,8 @@ import { Categoria } from '../../shared/models/categoria';
 export class CategoriaService {
 
   private http = inject(HttpClient);
-  private urlCategorias = 'http://localhost:8080/api/categorias';
-  private urlNuevo = 'http://localhost:8080/api/categorias'
+  private urlCategorias = 'https://api.ezer.pe/api/categorias';
+  private urlNuevo = 'https://api.ezer.pe/api/categorias'
 
   getCategorias(): Observable<any[]> {
     return this.http.get<any[]>(this.urlCategorias);

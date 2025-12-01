@@ -1,3 +1,5 @@
+import { VarianteResponse } from './varianteresponse';
+
 export interface Producto {
   id?: number;
   nombre: string;
@@ -5,4 +7,5 @@ export interface Producto {
   marca?: string;
   activo?: boolean;
   slug: string;
+  variantes?: VarianteResponse[];
 }

@@ -9,8 +9,8 @@ import { Producto } from '../../shared/models/producto';
 export class ProductoService {
 
   private http = inject(HttpClient);
-  private urlProductos = 'http://localhost:8080/api/productos';
-  private urlNuevo = 'http://localhost:8080/api/productos'
+  private urlProductos = 'https://api.ezer.pe/api/productos';
+  private urlNuevo = 'https://api.ezer.pe/api/productos'
 
   getProductos(): Observable<any[]> {
     return this.http.get<any[]>(this.urlProductos);

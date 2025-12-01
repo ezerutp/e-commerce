@@ -9,7 +9,7 @@ import { LoginResponse } from '../../features/auth/models/login-response.js';
 })
 export class AuthService {
 
-  private api = 'http://localhost:8080/auth';
+  private api = 'https://api.ezer.pe/auth';
   private userNameSubject = new BehaviorSubject<string>('');
   public userName$ = this.userNameSubject.asObservable();
 

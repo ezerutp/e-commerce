@@ -9,8 +9,8 @@ import { Usuario } from '../../shared/models/usuario';
 export class UsuarioService {
 
   private http = inject(HttpClient);
-  private urlUsuarios = 'http://localhost:8080/api/usuarios';
-  private urlNuevo = 'http://localhost:8080/api/usuarios'
+  private urlUsuarios = 'https://api.ezer.pe/api/usuarios';
+  private urlNuevo = 'https://api.ezer.pe/api/usuarios'
 
   getUsuarios(): Observable<any[]> {
     return this.http.get<any[]>(this.urlUsuarios);

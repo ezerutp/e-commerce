@@ -8,6 +8,9 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ProfileComponent } from './features/users/profile/profile.component';
 
 import { authGuard } from './core/guards/auth.guards';
+import { ProductListComponent } from './features/products/product-list/product-list.component';
+import { CarritoComponent } from './features/cart/carrito/carrito.component';
+import { CheckoutComponent } from './features/checkout/checkout.component';
 
 export const routes: Routes = [
 
@@ -45,6 +48,24 @@ export const routes: Routes = [
         component: ProfileComponent,
         canActivate: [authGuard],
         title: 'Perfil de Usuario',
+    },
+    {
+        path: 'listaProductos',
+        component: ProductListComponent,
+        canActivate: [authGuard],
+        title: 'Productos',
+    },
+    {
+        path: 'carrito',
+        component: CarritoComponent,
+        canActivate: [authGuard],
+        title: 'Carrito de Compras',
+    },
+    {
+        path: 'checkout',
+        component: CheckoutComponent,
+        canActivate: [authGuard],
+        title: 'Carrito de Compras',
     },
     {
         path: '**',
