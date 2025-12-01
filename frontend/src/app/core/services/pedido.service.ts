@@ -19,8 +19,8 @@ export interface Pedido {
 })
 export class PedidoService {
   private http = inject(HttpClient);
-  private urlPedidos = 'http://api.ezer.pe/api/pedidos';
-  private urlPedidoItems = 'http://api.ezer.pe/api/pedido-items';
+  private urlPedidos = 'https://api.ezer.pe/api/pedidos';
+  private urlPedidoItems = 'https://api.ezer.pe/api/pedido-items';
 
   crearPedidoCompleto(items: CarritoItem[], usuarioId: number): Observable<Pedido> {
     const subtotal = items.reduce((sum, item) => sum + (item.precioUnitario * item.cantidad), 0);

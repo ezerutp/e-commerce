@@ -1,7 +1,5 @@
 package pe.desarrolloweb.backend.config;
 
-import java.util.Arrays;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,9 +44,10 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(Arrays.asList("*"));
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedOriginPattern("https://*.ezer.pe");
         config.addAllowedHeader("*");
-        // sin comodines
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
         config.addAllowedMethod("PUT");
