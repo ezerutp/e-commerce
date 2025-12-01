@@ -39,7 +39,7 @@ public class ProductoController {
 
     // Obtener un producto por ID
     @GetMapping("/{id}")
-    public ResponseEntity<ProductoResponse> getProductoById(@PathVariable Long id) {
+    public ResponseEntity<ProductoResponse> getProductoById(@PathVariable("id") Long id) {
         Optional<Producto> producto = productoService.findById(id);
         if (producto.isPresent()) {
             ProductoResponse response = ProductoMapper.toResponse(producto.get());
@@ -60,7 +60,7 @@ public class ProductoController {
 
     // Actualizar un producto existente
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductoResponse> updateProducto(@PathVariable Long id, @Valid @RequestBody ProductoRequest request) {
+    public ResponseEntity<ProductoResponse> updateProducto(@PathVariable("id") Long id, @Valid @RequestBody ProductoRequest request) {
         Optional<Producto> productoExistente = productoService.findById(id);
         if (productoExistente.isPresent()) {
             Producto producto = productoExistente.get();
@@ -89,7 +89,7 @@ public class ProductoController {
 
     // Eliminar un producto por ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProducto(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProducto(@PathVariable("id") Long id) {
         Optional<Producto> producto = productoService.findById(id);
         if (producto.isPresent()) {
             productoService.deleteById(id);
