@@ -1,0 +1,36 @@
+<div class="container my-4">
+
+    <!-- Barra de búsqueda -->
+    <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Buscar productos..." [(ngModel)]="busqueda"
+            (input)="buscar()">
+    </div>
+
+    <!-- Lista de productos -->
+    <div class="row">
+        <div class="col-md-4 mb-3"
+            *ngFor="let producto of productosFiltrados; let i = index; trackBy: trackByProductoId">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ producto.nombre }}</h5>
+
+                    <!-- Botón pequeño -->
+                    <button class="btn btn-sm btn-outline-secondary mb-2" (click)="mostrar[i] = !mostrar[i]">
+                        {{ mostrar[i] ? 'Ocultar' : 'Mostrar' }} descripción
+                    </button>
+
+                    <!-- Descripción condicional -->
+                    <p class="card-text" *ngIf="mostrar[i]">{{ producto.descripcion }}</p>
+
+                    <p class="card-text"><strong>Marca:</strong > {{ producto.marca }}</p>
+                    <p class="card-text"><strong>Precio:</strong> {{ getPrecio(producto) | currency:'USD' }}</p>
+
+                    <button class="btn btn-primary" (click)="agregarAlCarrito(producto)">
+                        Agregar al carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

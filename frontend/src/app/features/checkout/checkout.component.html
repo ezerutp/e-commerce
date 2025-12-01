@@ -1,0 +1,31 @@
+<div class="container my-4">
+  <h3>Checkout</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>{{ item.nombre }}</td>
+        <td>{{ item.precioUnitario | currency:'USD' }}</td>
+        <td>{{ item.cantidad }}</td>
+        <td>{{ (item.precioUnitario * item.cantidad) | currency:'USD' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-end gap-2 mt-3">
+    <h5 class="mb-0 align-self-center me-3">Subtotal: {{ subtotal | currency:'USD' }}</h5>
+    <button class="btn btn-secondary" (click)="regresarAlCarrito()">
+      Regresar al Carrito
+    </button>
+    <button class="btn btn-success" (click)="confirmarCompra()" [disabled]="items.length === 0">
+      Confirmar Compra
+    </button>
+  </div>
+</div>
