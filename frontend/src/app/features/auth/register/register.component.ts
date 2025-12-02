@@ -78,7 +78,7 @@ export class RegisterComponent implements OnInit{
       },
       error: (err) => {
         console.error('Error al crear usuario:', err);
-        const mensaje = err.error?.message || err.message || 'Error al crear usuario. Por favor, intenta nuevamente.';
+        const mensaje = 'Error al crear usuario. Por favor, intenta nuevamente.';
         this.mostrarToastError(mensaje);
       },
     });
