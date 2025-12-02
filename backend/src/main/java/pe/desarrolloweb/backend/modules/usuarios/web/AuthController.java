@@ -32,7 +32,10 @@ public class AuthController {
         }
         Optional<Usuario> user = usuarioService.findByUsername(username);
 		if (user.isPresent() && passwordEncoder.matches(authRequest.password(), user.get().getPassword())) {
-			return ResponseEntity.ok(Map.of("token",jwtUtil.generateToken(user.get().getUsername())));
+			return ResponseEntity.ok(Map.of(
+                "token", jwtUtil.generateToken(user.get().getUsername()),
+                "rol", user.get().getRol().toString()
+            ));
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}

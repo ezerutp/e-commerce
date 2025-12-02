@@ -12,6 +12,8 @@ export class AuthService {
   private api = 'https://api.ezer.pe/auth';
   private userNameSubject = new BehaviorSubject<string>('');
   public userName$ = this.userNameSubject.asObservable();
+  private rolSubject = new BehaviorSubject<string>('');
+  public rol$ = this.rolSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -20,6 +22,8 @@ export class AuthService {
       .pipe(
         tap(res => {
           localStorage.setItem('token', res.token);
+          localStorage.setItem('rol', res.rol);
+          this.rolSubject.next(res.rol);
         })
       );
   }
@@ -28,9 +32,15 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
+  getRol(): string | null {
+    return localStorage.getItem('rol');
+  }
+
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('rol');
     this.userNameSubject.next('');
+    this.rolSubject.next('');
   }
 
   isLoggedIn(): boolean {
