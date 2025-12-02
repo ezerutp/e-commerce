@@ -52,9 +52,15 @@ export class RegisterComponent implements OnInit{
       return;
     }
 
-    console.log("Enviando usuario:", this.miForm.value);
+    const usuarioData = {
+      ...this.miForm.value,
+      estado: 'ACTIVO',
+      rol: 'USUARIO'
+    };
 
-    this.usuarioService.createUsuario(this.miForm.value).subscribe({
+    console.log("Enviando usuario:", usuarioData);
+
+    this.usuarioService.createUsuario(usuarioData).subscribe({
       next: (data) => {
         console.log('Usuario creado:', data);
         
