@@ -76,12 +76,28 @@ export class RegisterComponent implements OnInit{
         // Recargar lista de usuarios
         this.cargarUsuarios();
       },
-      error: (err) => console.error('Error al crear usuario:', err),
+      error: (err) => {
+        console.error('Error al crear usuario:', err);
+        const mensaje = err.error?.message || err.message || 'Error al crear usuario. Por favor, intenta nuevamente.';
+        this.mostrarToastError(mensaje);
+      },
     });
   }
 
   mostrarToast() {
     const toastElement = document.getElementById('successToast');
+    if (toastElement) {
+      const toast = new bootstrap.Toast(toastElement);
+      toast.show();
+    }
+  }
+
+  mostrarToastError(mensaje: string) {
+    const messageElement = document.getElementById('errorMessage');
+    if (messageElement) {
+      messageElement.textContent = mensaje;
+    }
+    const toastElement = document.getElementById('errorToast');
     if (toastElement) {
       const toast = new bootstrap.Toast(toastElement);
       toast.show();
