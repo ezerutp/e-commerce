@@ -36,4 +36,9 @@ export class UsuarioService {
     return this.http.patch<Usuario>(`${this.urlUsuarios}/${id}`, u);
   }
 
+  // Eliminar un usuario
+  deleteUsuario(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.urlUsuarios}/${id}`);
+  }
+
 }
